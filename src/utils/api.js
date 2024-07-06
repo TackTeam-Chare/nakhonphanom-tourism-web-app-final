@@ -43,6 +43,7 @@ export const getNearbyFetchTourismData = async (id, radius = 5000) => {
 
 
 
+
 // ดึงสถานที่ตามหมวดหมู่
 export const getFetchTourismDataByCategory = async () => {
   try {
