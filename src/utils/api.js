@@ -19,9 +19,10 @@ export const getAllFetchTourismData = async () => {
 };
 
 // ดึงสถานที่เเต่ละไอดี
-export const getFetchTourismDataById = async () => {
+// Fetch tourism data by ID
+export const getFetchTourismDataById = async (id) => {
   try {
-    const response = await api.get('/tourist-entities:id'); 
+    const response = await api.get(`/tourist-entities/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);
@@ -61,10 +62,10 @@ export const getFetchTourismDataByDistrict = async () => {
   }
 };
 
-// ดึงสถานที่ตามอำเภอ
+// ดึงสถานที่ตามฤดูกาล
 export const getFetchTourismDataBySeason = async () => {
   try {
-    const response = await api.get('/tourist-entities/district/:districtId'); 
+    const response = await api.get('/tourist-entities/season/:seasonId'); 
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);
