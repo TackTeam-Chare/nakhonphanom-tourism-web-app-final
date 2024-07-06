@@ -71,7 +71,7 @@ export default function Header() {
           </button>
         </div>
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
-        <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+        <a href="/" className="text-sm font-semibold leading-6 text-gray-900">
             หน้าเเรก
           </a>
           <Popover className="relative">

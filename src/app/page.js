@@ -1,9 +1,9 @@
 import React from 'react'
-import TourismPage from '@/app/tourism/page'
+import HomePage from '@/app/home/page'
 function PageHome() {
   return (
     <div>
-      <TourismPage/>
+      <HomePage/>
     </div>
   )
 }
