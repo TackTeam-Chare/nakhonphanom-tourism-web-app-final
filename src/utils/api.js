@@ -67,9 +67,9 @@ export const getFetchTourismDataByDistrict = async (id) => {
 };
 
 // ดึงสถานที่ตามฤดูกาล
-export const getFetchTourismDataBySeason = async () => {
+export const getFetchTourismDataBySeason = async (id) => {
   try {
-    const response = await api.get( `/tourist-entities/season/${seasonId}`);
+    const response = await api.get( `/tourist-entities/season/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);
