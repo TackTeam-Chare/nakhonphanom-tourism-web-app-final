@@ -1,13 +1,16 @@
 "use client"
 import { useEffect, useState } from 'react';
-import { getAllFetchTourismData } from '../../utils/api';
 import Image from 'next/image';
 import Link from 'next/link';
 import Layout from '@/components/common/layout';
+import { getAllFetchTourismData } from '../../utils/api';
+import Pagination from '@/components/actions/Pagination'; // Adjust path based on your file structure
 
 const TourismComponent = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [placesPerPage] = useState(6); // Adjust as per your design
 
   useEffect(() => {
     const getData = async () => {
@@ -24,13 +27,23 @@ const TourismComponent = () => {
 
   if (error) return <div className="text-red-500">Error: {error}</div>;
 
+  // Pagination logic
+  const indexOfLastPlace = currentPage * placesPerPage;
+  const indexOfFirstPlace = indexOfLastPlace - placesPerPage;
+  const currentPlaces = data.slice(indexOfFirstPlace, indexOfLastPlace);
+  const totalPages = Math.ceil(data.length / placesPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <Layout>
       <div className="container mx-auto p-4">
         <h1 className="text-3xl font-bold mb-8 text-center">Tourism Data</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {data.map((place, index) => (
-            <Link  className="hover:no-underline" key={index} href={`/tourism/${place.id}`}>
+          {currentPlaces.map((place, index) => (
+            <Link className="hover:no-underline" key={index} href={`/tourism/${place.id}`}>
                 <div className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition duration-500 ease-in-out">
                   {place.image_path && (
                     <Image
@@ -61,6 +74,11 @@ const TourismComponent = () => {
             </Link>
           ))}
         </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </Layout>
   );

@@ -40,6 +40,9 @@ export const getNearbyFetchTourismData = async (id, radius = 5000) => {
     throw error;
   }
 };
+
+
+
 // ดึงสถานที่ตามหมวดหมู่
 export const getFetchTourismDataByCategory = async () => {
   try {
