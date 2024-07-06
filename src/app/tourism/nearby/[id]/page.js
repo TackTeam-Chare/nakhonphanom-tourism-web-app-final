@@ -1,9 +1,8 @@
 "use client"
 import { useEffect, useState } from 'react';
 import { getFetchTourismDataById, getNearbyFetchTourismData } from '@/utils/api';
-import NearbyTourismListComponent from '@/components/tourism/nearby/[id]/NearbyTourismList'; // Adjust path as needed
+import NearbyTourismListComponent from '@/components/tourism/nearby/NearbyTourismList'; // Adjust path as needed
 import Layout from '@/components/common/layout';
-
 const Page = ({ params }) => {
   const { id } = params;
 
@@ -40,12 +39,7 @@ const Page = ({ params }) => {
     return <p>กำลังโหลดข้อมูล...</p>;
   }
 
-  return (
-    <> <Layout>
-      <NearbyTourismListComponent tourismData={tourismData} nearbyEntities={nearbyEntities} />
-      </Layout>
-    </>
-  );
+  return <><Layout><NearbyTourismListComponent tourismData={tourismData} nearbyEntities={nearbyEntities} /> </Layout></>;
 };
 
 export default Page;

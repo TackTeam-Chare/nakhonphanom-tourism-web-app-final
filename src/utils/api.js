@@ -45,9 +45,9 @@ export const getNearbyFetchTourismData = async (id, radius = 5000) => {
 
 
 // ดึงสถานที่ตามหมวดหมู่
-export const getFetchTourismDataByCategory = async () => {
+export const getFetchTourismDataByCategory = async (id) => {
   try {
-    const response = await api.get(`/tourist-entities/category/:${categoryId}`); 
+    const response = await api.get(`/tourist-entities/category/${id}`); 
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);
@@ -56,9 +56,9 @@ export const getFetchTourismDataByCategory = async () => {
 };
 
 // ดึงสถานที่ตามอำเภอ
-export const getFetchTourismDataByDistrict = async () => {
+export const getFetchTourismDataByDistrict = async (id) => {
   try {
-    const response = await api.get(`/tourist-entities/district/:${districtId}`); 
+    const response = await api.get(`/tourist-entities/district/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);
@@ -69,7 +69,7 @@ export const getFetchTourismDataByDistrict = async () => {
 // ดึงสถานที่ตามฤดูกาล
 export const getFetchTourismDataBySeason = async () => {
   try {
-    const response = await api.get( `/tourist-entities/season/:${seasonId}`);
+    const response = await api.get( `/tourist-entities/season/${seasonId}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);
