@@ -1,6 +1,6 @@
 // src/app/tourism/[id]/page.js
 import { getFetchTourismDataById } from '../../../utils/api';
-import TourismDetailsById from './TourismDetails';
+import TourismDetailsByIdComponent from '../../../components/tourism/[id]/TourismDetails';
 
 export async function generateMetadata({ params }) {
   const { id } = params;
@@ -12,5 +12,5 @@ export default async function Page({ params }) {
   const { id } = params;
   const tourismData = await getFetchTourismDataById(id);
 
-  return <TourismDetailsById tourismData={tourismData} />;
+  return <TourismDetailsByIdComponent tourismData={tourismData} />;
 }

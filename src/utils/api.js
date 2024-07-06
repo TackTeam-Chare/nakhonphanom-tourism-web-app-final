@@ -30,17 +30,16 @@ export const getFetchTourismDataById = async (id) => {
   }
 };
 
-// ดึงสถานที่เเต่ละไอดี
-export const getNearbyFetchTourismData = async () => {
+// Fetch nearby tourism entities for a specific entity ID
+export const getNearbyFetchTourismData = async (id, radius = 5000) => {
   try {
-    const response = await api.get(`/tourist-entities/${id}/nearby`); 
+    const response = await api.get(`/tourist-entities/${id}/nearby?radius=${radius}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);
     throw error;
   }
 };
-
 // ดึงสถานที่ตามหมวดหมู่
 export const getFetchTourismDataByCategory = async () => {
   try {

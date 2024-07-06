@@ -1,7 +1,7 @@
 // src/app/tourism/[id]/TourismDetails.js
 'use client';
 import Layout from '@/components/common/layout';
-const TourismDetailsById = ({ tourismData }) => {
+const TourismDetailsByIdComponent = ({ tourismData }) => {
   if (!tourismData) {
     return <p>Loading...</p>;
   }
@@ -25,4 +25,4 @@ const TourismDetailsById = ({ tourismData }) => {
   );
 };
 
-export default TourismDetailsById;
+export default TourismDetailsByIdComponent;

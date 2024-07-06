@@ -1,71 +1,11 @@
-"use client";
-import { useEffect, useState } from 'react';
-import { getAllFetchTourismData } from '../../utils/api';
-import Image from 'next/image'
-import Layout from '@/components/common/layout';
-
-
-const TourismPage = () => {
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const result = await getAllFetchTourismData();
-        setData(result);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-
-    getData();
-  }, []);
-
-  if (error) return <div className="text-red-500">Error: {error}</div>;
-
+import React from 'react'
+import TourismComponent from '@/components/tourism/page'
+function TourismPage() {
   return (
-    <Layout>
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-8 text-center">Tourism Data</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {data.map((place, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition duration-500 ease-in-out"
-          >
-            {place.image_path && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <Image
-                src={place.image_path}
-                alt={place.name}
-                width={500}
-                height={300}
-                priority
-                className="w-full h-48 object-cover"
-              />
-            )}
-            <div className="p-6">
-              <h2 className="text-2xl font-bold mb-2">{place.name}</h2>
-              <p className="text-gray-700 mb-2">
-                <strong>Location:</strong> {place.location}
-              </p>
-              <p className="text-gray-700 mb-2">
-                <strong>Description:</strong> {place.description}
-              </p>
-              <p className="text-gray-700 mb-2">
-                <strong>Type:</strong> {place.category_name}
-              </p>
-              <p className="text-gray-700">
-                <strong>District:</strong> {place.district_name}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
+    <div>
+      <TourismComponent/>
     </div>
-    </Layout>
-  );
-};
+  )
+}
 
-export default TourismPage;
+export default TourismPage
