@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import {
   Dialog,
@@ -12,6 +11,7 @@ import {
   PopoverGroup,
   PopoverPanel,
 } from '@headlessui/react'
+
 import {
   ArrowPathIcon,
   Bars3Icon,
@@ -49,11 +49,8 @@ const recommend = [
 //   { name: 'ติดต่อจังหวัด ', href: '#', icon: PhoneIcon },
 // ]
 
-
-
-export default function Example() {
+export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
   return (
     <header className="bg-white">
       <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
