@@ -1,13 +1,11 @@
-// src/app/tourism/[id]/TourismDetails.js
+
 'use client';
-import Layout from '@/components/common/layout';
 const TourismDetailsByIdComponent = ({ tourismData }) => {
   if (!tourismData) {
     return <p>Loading...</p>;
   }
 
   return (
-    <Layout>
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">{tourismData.name}</h1>
       <p className="mb-4">{tourismData.description}</p>
@@ -21,7 +19,7 @@ const TourismDetailsByIdComponent = ({ tourismData }) => {
         </div>
       </div>
     </div>
-    </Layout>
+
   );
 };
 

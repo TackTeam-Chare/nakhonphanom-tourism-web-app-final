@@ -1,11 +1,8 @@
-// src/components/tourism/[id]/page.js
 "use client"
-// src/components/tourism/[id]/page.js
-
 import { useEffect, useState } from 'react';
-import { getFetchTourismDataById, getNearbyFetchTourismData } from '../../../utils/api';
-import TourismDetailsByIdComponent from '@/components/tourism/[id]/TourismDetails'; // Adjust path as needed
-import NearbyTourismDetails from '@/components/nearby/[id]/NearbyTourismDetails'; // Adjust path as needed
+import { getFetchTourismDataById, getNearbyFetchTourismData } from '@/utils/api';
+import NearbyTourismListComponent from '@/components/tourism/nearby/[id]/NearbyTourismList'; // Adjust path as needed
+import Layout from '@/components/common/layout';
 
 const Page = ({ params }) => {
   const { id } = params;
@@ -35,7 +32,6 @@ const Page = ({ params }) => {
         }
       }
     };
-
     fetchTourismData();
     fetchNearbyEntities();
   }, [id]);
@@ -45,9 +41,9 @@ const Page = ({ params }) => {
   }
 
   return (
-    <>
-      <TourismDetailsByIdComponent tourismData={tourismData} />
-      <NearbyTourismDetails tourismData={tourismData} nearbyEntities={nearbyEntities} />
+    <> <Layout>
+      <NearbyTourismListComponent tourismData={tourismData} nearbyEntities={nearbyEntities} />
+      </Layout>
     </>
   );
 };

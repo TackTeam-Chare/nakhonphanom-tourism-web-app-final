@@ -1,7 +1,7 @@
 // src/app/tourism/[id]/page.js
 import { getFetchTourismDataById } from '../../../utils/api';
 import TourismDetailsByIdComponent from '../../../components/tourism/[id]/TourismDetails';
-
+import Layout from '@/components/common/layout';
 export async function generateMetadata({ params }) {
   const { id } = params;
   const tourismData = await getFetchTourismDataById(id);
@@ -12,5 +12,6 @@ export default async function Page({ params }) {
   const { id } = params;
   const tourismData = await getFetchTourismDataById(id);
 
-  return <TourismDetailsByIdComponent tourismData={tourismData} />;
+  return   <> <Layout><TourismDetailsByIdComponent tourismData={tourismData} /> </Layout></>;
+
 }

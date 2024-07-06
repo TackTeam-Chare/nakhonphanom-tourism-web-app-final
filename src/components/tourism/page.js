@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import Layout from '@/components/common/layout';
+
 import { getAllFetchTourismData } from '../../utils/api';
 import Pagination from '@/components/actions/Pagination'; // Adjust path based on your file structure
 
@@ -38,12 +38,12 @@ const TourismComponent = () => {
   };
 
   return (
-    <Layout>
+    
       <div className="container mx-auto p-4">
         <h1 className="text-3xl font-bold mb-8 text-center">Tourism Data</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {currentPlaces.map((place, index) => (
-            <Link className="hover:no-underline" key={index} href={`/tourism/${place.id}`}>
+            <Link className="hover:no-underline" key={index} href={`/tourism/nearby/${place.id}`}>
                 <div className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition duration-500 ease-in-out">
                   {place.image_path && (
                     <Image
@@ -80,7 +80,7 @@ const TourismComponent = () => {
           onPageChange={handlePageChange}
         />
       </div>
-    </Layout>
+
   );
 };
 

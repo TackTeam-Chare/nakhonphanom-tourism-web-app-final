@@ -1,8 +1,6 @@
-// src/components/nearby/[id]/NearbyTourismDetails.js
 
 import React from 'react';
-
-const NearbyTourismDetails = ({ tourismData, nearbyEntities }) => {
+const NearbyTourismListComponent = ({ tourismData, nearbyEntities }) => {
   if (!nearbyEntities || nearbyEntities.length === 0) {
     return <p>ไม่พบสถานที่ท่องเที่ยวใกล้เคียง</p>;
   }
@@ -34,4 +32,4 @@ const NearbyTourismDetails = ({ tourismData, nearbyEntities }) => {
   );
 };
 
-export default NearbyTourismDetails;
+export default NearbyTourismListComponent;
