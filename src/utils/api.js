@@ -76,3 +76,20 @@ export const getFetchTourismDataBySeason = async (id) => {
     throw error;
   }
 };
+
+
+export  const getTourismDataByOperatingHours = async (day_of_week, opening_time, closing_time) => {
+  try {
+    const response = await api.get(`/tourist-entities/operating-hours/${day_of_week}/${opening_time}/${closing_time}`, {
+      params: {
+        day_of_week,
+        opening_time,
+        closing_time
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching tourism data by operating hours:', error);
+    throw error;
+  }
+};
