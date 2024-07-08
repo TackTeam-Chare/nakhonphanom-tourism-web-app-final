@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { getFetchTourismDataById, getNearbyFetchTourismData } from '@/utils/api';
 import NearbyTourismListComponent from '@/components/tourism/nearby/NearbyTourismList'; // Adjust path as needed
 import Layout from '@/components/common/layout';
+
 const Page = ({ params }) => {
   const { id } = params;
 
@@ -25,12 +26,15 @@ const Page = ({ params }) => {
       if (id) {
         try {
           const data = await getNearbyFetchTourismData(id);
-          setNearbyEntities(data.nearbyEntities);
+          // กรองข้อมูลที่ซ้ำกันออก
+          const uniqueNearbyEntities = data.nearbyEntities.filter(entity => entity.id !== id);
+          setNearbyEntities(uniqueNearbyEntities);
         } catch (error) {
           console.error('เกิดข้อผิดพลาดในการดึงข้อมูลสถานที่ท่องเที่ยวใกล้เคียง:', error);
         }
       }
     };
+
     fetchTourismData();
     fetchNearbyEntities();
   }, [id]);
@@ -39,7 +43,11 @@ const Page = ({ params }) => {
     return <p>กำลังโหลดข้อมูล...</p>;
   }
 
-  return <><Layout><NearbyTourismListComponent tourismData={tourismData} nearbyEntities={nearbyEntities} /> </Layout></>;
+  return (
+    <Layout>
+      <NearbyTourismListComponent tourismData={tourismData} nearbyEntities={nearbyEntities} />
+    </Layout>
+  );
 };
 
 export default Page;

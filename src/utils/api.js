@@ -31,7 +31,7 @@ export const getFetchTourismDataById = async (id) => {
 };
 
 // Fetch nearby tourism entities for a specific entity ID
-export const getNearbyFetchTourismData = async (id, radius = 5000) => {
+export const getNearbyFetchTourismData = async (id, radius = 1500) => {
   try {
     const response = await api.get(`/tourist-entities/${id}/nearby?radius=${radius}`);
     return response.data;
