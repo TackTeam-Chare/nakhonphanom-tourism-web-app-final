@@ -10,7 +10,7 @@ const api = axios.create({
 // ดึงสถานที่ทั้งหมด
 export const getAllFetchTourismData = async () => {
   try {
-    const response = await api.get('/tourist-entities'); 
+    const response = await api.get('/place'); 
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);
@@ -22,7 +22,7 @@ export const getAllFetchTourismData = async () => {
 // Fetch tourism data by ID
 export const getFetchTourismDataById = async (id) => {
   try {
-    const response = await api.get(`/tourist-entities/${id}`);
+    const response = await api.get(`/place/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);
@@ -33,7 +33,7 @@ export const getFetchTourismDataById = async (id) => {
 // Fetch nearby tourism entities for a specific entity ID
 export const getNearbyFetchTourismData = async (id, radius = 1500) => {
   try {
-    const response = await api.get(`/tourist-entities/${id}/nearby?radius=${radius}`);
+    const response = await api.get(`/place/${id}/nearby?radius=${radius}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);
@@ -47,7 +47,7 @@ export const getNearbyFetchTourismData = async (id, radius = 1500) => {
 // ดึงสถานที่ตามหมวดหมู่
 export const getFetchTourismDataByCategory = async (id) => {
   try {
-    const response = await api.get(`/tourist-entities/category/${id}`); 
+    const response = await api.get(`/place/category/${id}`); 
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);
@@ -58,7 +58,7 @@ export const getFetchTourismDataByCategory = async (id) => {
 // ดึงสถานที่ตามอำเภอ
 export const getFetchTourismDataByDistrict = async (id) => {
   try {
-    const response = await api.get(`/tourist-entities/district/${id}`);
+    const response = await api.get(`/districts/${id}/place`);
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);
@@ -69,7 +69,7 @@ export const getFetchTourismDataByDistrict = async (id) => {
 // ดึงสถานที่ตามฤดูกาล
 export const getFetchTourismDataBySeason = async (id) => {
   try {
-    const response = await api.get( `/tourist-entities/season/${id}`);
+    const response = await api.get( `/season/${id}/place`);
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);
@@ -80,7 +80,7 @@ export const getFetchTourismDataBySeason = async (id) => {
 
 export  const getTourismDataByOperatingHours = async (day_of_week, opening_time, closing_time) => {
   try {
-    const response = await api.get(`/tourist-entities/operating-hours/${day_of_week}/${opening_time}/${closing_time}`, {
+    const response = await api.get(`/operating-hours/${day_of_week}/${opening_time}/${closing_time}`, {
       params: {
         day_of_week,
         opening_time,
