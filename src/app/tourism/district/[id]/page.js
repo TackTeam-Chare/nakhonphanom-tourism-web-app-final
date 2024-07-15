@@ -1,5 +1,5 @@
 // src/app/tourism/district/[id]/page.js
-import { getFetchTourismDataByDistrict } from '../../../../utils/api';
+import { getFetchTourismDataByDistrict } from '../../../../utils/user/api';
 import TourismByDistrict from '@/components/tourism/district/TourismByDistrict';
 export async function generateMetadata({ params }) {
   const { id } = params;

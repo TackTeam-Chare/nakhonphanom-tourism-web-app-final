@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { getProfile, updateProfile, verifyPassword } from '@/utils/auth/authRoutes';
+import { getProfile, updateProfile, verifyPassword } from '@/utils/auth/auth';
 
 export default function AdminProfile() {
   const [username, setUsername] = useState('');
@@ -51,6 +51,11 @@ export default function AdminProfile() {
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
+    if (name === '' || username === '') {
+      alert('Name and Username cannot be empty');
+      return;
+    }
+
     try {
       const token = localStorage.getItem('token');
       await updateProfile({ username, name }, token);
@@ -64,6 +69,11 @@ export default function AdminProfile() {
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
+    if (newPassword === '') {
+      alert('New Password cannot be empty');
+      return;
+    }
+
     try {
       const token = localStorage.getItem('token');
       await updateProfile({ password: newPassword }, token);

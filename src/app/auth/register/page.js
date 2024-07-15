@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { register } from '@/utils/auth/authRoutes';
+import { register } from '@/utils/auth/auth';
 
 export default function AdminRegister() {
   const [username, setUsername] = useState('');
@@ -12,6 +12,7 @@ export default function AdminRegister() {
     try {
       const response = await register({ username, password, name });
       console.log('Register successful:', response);
+      localStorage.setItem('token', response.token);
       // Navigate to login or dashboard
     } catch (error) {
       console.error('Register failed:', error);

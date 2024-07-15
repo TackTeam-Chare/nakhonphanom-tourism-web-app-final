@@ -1,7 +1,7 @@
 
 "use client"
 import React, { useState } from 'react';
-import { getTourismDataByOperatingHours } from '@/utils/api';
+import { getTourismDataByOperatingHours } from '@/utils/user/api';
 
 const TouristEntitiesByTimeComponent = () => {
   const [dayOfWeek, setDayOfWeek] = useState('Monday');

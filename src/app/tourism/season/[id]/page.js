@@ -1,5 +1,5 @@
 // src/app/tourism/district/[id]/page.js
-import { getFetchTourismDataBySeason } from '@/utils/api';
+import { getFetchTourismDataBySeason } from '@/utils/user/api';
 import TourismBySeason from '@/components/tourism/season/TourismBySeason';
 export async function generateMetadata({ params }) {
   const { id } = params;

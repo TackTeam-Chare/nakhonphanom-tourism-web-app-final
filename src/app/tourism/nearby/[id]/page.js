@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { getNearbyFetchTourismData } from '@/utils/api';
+import { getNearbyFetchTourismData } from '@/utils/user/api';
 import NearbyTourismListComponent from '@/components/tourism/nearby/NearbyTourismList'; // Adjust path as needed
 import Layout from '@/components/common/layout';
 

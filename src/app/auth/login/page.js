@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { login } from '@/utils/auth/authRoutes';
+import { login } from '@/utils/auth/auth';
 
 export default function AdminLogin() {
   const [username, setUsername] = useState('');

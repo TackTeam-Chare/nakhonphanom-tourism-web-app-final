@@ -1,5 +1,5 @@
 
-import { getFetchTourismDataById } from '../../../utils/api';
+import { getFetchTourismDataById } from '../../../utils/user/api';
 import TourismDetailsByIdComponent from '../../../components/tourism/TourismDetails';
 import Layout from '@/components/common/layout';
 

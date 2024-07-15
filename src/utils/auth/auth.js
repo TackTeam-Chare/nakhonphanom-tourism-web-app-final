@@ -4,10 +4,20 @@ const auth = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
 });
 
+// เพิ่ม token ใน headers ของทุก request
+auth.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// ฟังก์ชันสำหรับ get token จาก localStorage
+const getToken = () => localStorage.getItem('token');
 export const login = async (data) => {
   try {
     const response = await auth.post('/auth/login', data);
-    // Save token to localStorage
     localStorage.setItem('token', response.data.token);
     return response.data;
   } catch (error) {
@@ -16,8 +26,9 @@ export const login = async (data) => {
   }
 };
 
-export const verifyPassword = async (data, token) => {
+export const verifyPassword = async (data) => {
   try {
+    const token = getToken();
     const response = await auth.post('/auth/verify-password', data, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -28,9 +39,9 @@ export const verifyPassword = async (data, token) => {
   }
 };
 
-// Fetch profile
-export const getProfile = async (token) => {
+export const getProfile = async () => {
   try {
+    const token = getToken();
     const response = await auth.get('/auth/profile', {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -41,9 +52,9 @@ export const getProfile = async (token) => {
   }
 };
 
-// Update profile
-export const updateProfile = async (data, token) => {
+export const updateProfile = async (data) => {
   try {
+    const token = getToken();
     const response = await auth.put('/auth/profile', data, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -57,6 +68,7 @@ export const updateProfile = async (data, token) => {
 export const register = async (data) => {
   try {
     const response = await auth.post('/auth/register', data);
+    localStorage.setItem('token', response.data.token);
     return response.data;
   } catch (error) {
     console.error('Error registering:', error);
@@ -64,12 +76,13 @@ export const register = async (data) => {
   }
 };
 
-
-export const logout = async (token) => {
+export const logout = async () => {
   try {
+    const token = getToken();
     const response = await auth.post('/auth/logout', null, {
       headers: { Authorization: `Bearer ${token}` }
     });
+    localStorage.removeItem('token');
     return response.data;
   } catch (error) {
     console.error('Error logging out:', error);
@@ -77,12 +90,12 @@ export const logout = async (token) => {
   }
 };
 
-
-
-// Fetch tourism data
 export const getAllFetchTourismData = async () => {
   try {
-    const response = await auth.get('/admin/place');
+    const token = getToken();
+    const response = await auth.get('/admin/place', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);
@@ -90,10 +103,12 @@ export const getAllFetchTourismData = async () => {
   }
 };
 
-// Fetch tourism data by ID
 export const getFetchTourismDataById = async (id) => {
   try {
-    const response = await auth.get(`/admin/place/${id}`);
+    const token = getToken();
+    const response = await auth.get(`/admin/place/${id}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);
@@ -101,10 +116,12 @@ export const getFetchTourismDataById = async (id) => {
   }
 };
 
-// Fetch nearby tourism data
 export const getNearbyFetchTourismData = async (id) => {
   try {
-    const response = await auth.get(`/admin/place/${id}/nearby`);
+    const token = getToken();
+    const response = await auth.get(`/admin/place/${id}/nearby`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);
@@ -112,10 +129,12 @@ export const getNearbyFetchTourismData = async (id) => {
   }
 };
 
-// Fetch tourism data by category
 export const getFetchTourismDataByCategory = async (categoryId) => {
   try {
-    const response = await auth.get(`/admin/category/${categoryId}/place`);
+    const token = getToken();
+    const response = await auth.get(`/admin/category/${categoryId}/place`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);
@@ -123,10 +142,12 @@ export const getFetchTourismDataByCategory = async (categoryId) => {
   }
 };
 
-// Fetch tourism data by district
 export const getFetchTourismDataByDistrict = async (districtId) => {
   try {
-    const response = await auth.get(`/admin/district/${districtId}/place`);
+    const token = getToken();
+    const response = await auth.get(`/admin/district/${districtId}/place`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);
@@ -134,10 +155,12 @@ export const getFetchTourismDataByDistrict = async (districtId) => {
   }
 };
 
-// Fetch tourism data by season
 export const getFetchTourismDataBySeason = async (seasonId) => {
   try {
-    const response = await auth.get(`/admin/season/${seasonId}/place`);
+    const token = getToken();
+    const response = await auth.get(`/admin/season/${seasonId}/place`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
     return response.data;
   } catch (error) {
     console.error('Error fetching tourism data:', error);

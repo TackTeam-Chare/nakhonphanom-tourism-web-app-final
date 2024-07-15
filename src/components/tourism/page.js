@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { getAllFetchTourismData } from '../../utils/api';
+import { getAllFetchTourismData } from '../../utils/user/api';
 import Pagination from '@/components/actions/Pagination'; // Adjust path based on your file structure
 
 const TourismComponent = () => {
