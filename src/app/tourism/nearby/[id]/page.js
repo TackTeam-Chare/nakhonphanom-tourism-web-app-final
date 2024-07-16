@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 import { getNearbyFetchTourismData } from '@/utils/user/api';
-import NearbyTourismListComponent from '@/components/tourism/nearby/NearbyTourismList'; // Adjust path as needed
+import NearbyTourismListComponent from '@/components/tourism/nearby/NearbyTourismList';
 import Layout from '@/components/common/layout';
 
 const Page = ({ params }) => {
@@ -15,8 +15,8 @@ const Page = ({ params }) => {
       if (id) {
         try {
           const data = await getNearbyFetchTourismData(id);
-          setTourismData(data.entity); // Selected tourism entity data
-          setNearbyEntities(data.nearbyEntities); // Nearby tourism entities data
+          setTourismData(data.entity);
+          setNearbyEntities(data.nearbyEntities);
         } catch (error) {
           console.error('Error fetching tourism data:', error);
         }
