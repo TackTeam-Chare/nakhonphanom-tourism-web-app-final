@@ -69,7 +69,18 @@ export const createSeason = async (data) => {
   }
 };
 
-
+export const createSeasonsRelation = async (data) => {
+  try {
+    const token = getToken();
+    const response = await auth.post('/admin/seasons-relation', data, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error creating relation:', error);
+    throw error;
+  }
+};
 export const createOperatingHours = async (data) => {
   try {
     const token = getToken();
@@ -82,3 +93,6 @@ export const createOperatingHours = async (data) => {
     throw error;
   }
 };
+
+
+export default auth;

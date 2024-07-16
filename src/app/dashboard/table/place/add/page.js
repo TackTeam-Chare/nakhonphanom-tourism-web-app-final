@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import { createTouristEntity, getDistricts, getCategories } from "@/utils/auth/admin/add/api";
+import { createTouristEntity } from "@/utils/auth/admin/add/api";
+import { getDistricts, getCategories } from "@/utils/auth/admin/get/api";
 
 export default function CreateProject() {
   const [formData, setFormData] = useState({

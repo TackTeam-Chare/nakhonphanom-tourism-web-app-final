@@ -1,6 +1,24 @@
 
+// src/utils/auth/admin/api.js
+import axios from 'axios';
 
-export const getAllFetchTourismData = async () => {
+const auth = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+});
+
+// Adding the token to the headers of every request
+auth.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Function to get token from localStorage
+const getToken = () => localStorage.getItem('token');
+
+export const getPlace = async () => {
     try {
       const token = getToken();
       const response = await auth.get('/admin/place', {
@@ -12,6 +30,21 @@ export const getAllFetchTourismData = async () => {
       throw error;
     }
   };
+
+
+  export const getSeasons = async () => {
+    try {
+        const token = getToken();
+        const response = await auth.get('/admin/seasons', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching seasons:', error);
+      throw error;
+    }
+  };
+
 export const getDistricts = async () => {
   try {
     const token = getToken();
@@ -38,7 +71,18 @@ export const getCategories = async () => {
   }
 };
 
-// ...other functions
+export const getCategoryById = async (id) => {
+    try {
+    const token = getToken();
+      const response = await auth.get(`/admin/categories/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching category:', error);
+      throw error;
+    }
+  };
 
   
   // Fetch tourism data by ID

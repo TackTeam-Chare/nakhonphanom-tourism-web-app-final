@@ -4,19 +4,21 @@ const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
 });
 
-// User ผู้ใช้ทั่วไป
-// ดึงสถานที่ทั้งหมด
 export const getAllFetchTourismData = async () => {
   try {
     const response = await api.get('/place');
-    return Array.isArray(response.data) ? response.data : [];
+    const data = Array.isArray(response.data) ? response.data : [];
+    
+    return data.map(place => ({
+      ...place,
+      image_path: place.image_path ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${place.image_path}` : null,
+    }));
   } catch (error) {
     console.error('Error fetching tourism data:', error);
     throw error;
   }
 };
 
-// ดึงสถานที่เเต่ละไอดี
 // Fetch tourism data by ID
 export const getFetchTourismDataById = async (id) => {
   try {
@@ -29,6 +31,7 @@ export const getFetchTourismDataById = async (id) => {
     throw error;
   }
 };
+
 
 export const getNearbyFetchTourismData = async (id, radius = 1500) => {
   try {
