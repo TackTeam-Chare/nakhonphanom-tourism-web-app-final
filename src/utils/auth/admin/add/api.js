@@ -84,7 +84,7 @@ export const createSeasonsRelation = async (data) => {
 export const createOperatingHours = async (data) => {
   try {
     const token = getToken();
-    const response = await auth.post('/admin/operating-hours', data, {
+    const response = await auth.post('/admin/time', data, {
         headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;

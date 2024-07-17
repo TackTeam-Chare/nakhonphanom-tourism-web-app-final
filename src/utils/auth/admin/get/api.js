@@ -1,142 +1,247 @@
-
 // src/utils/auth/admin/api.js
 import axios from 'axios';
 
 const auth = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
 });
 
 // Adding the token to the headers of every request
 auth.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
 });
 
 // Function to get token from localStorage
 const getToken = () => localStorage.getItem('token');
 
-export const getPlace = async () => {
+export const getPlaces = async () => {
     try {
-      const token = getToken();
-      const response = await auth.get('/admin/place', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      return response.data;
+        const token = getToken();
+        const response = await auth.get('/admin/place', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
     } catch (error) {
-      console.error('Error fetching tourism data:', error);
-      throw error;
+        console.error('Error fetching tourism data:', error);
+        throw error;
     }
-  };
+};
 
-
-  export const getSeasons = async () => {
+export const getPlaceById = async (id) => {
+    try {
+        const response = await auth.get(`admin/place/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching tourist entity:', error);
+        throw error;
+    }
+};
+export const getSeasons = async () => {
     try {
         const token = getToken();
         const response = await auth.get('/admin/seasons', {
-            headers: { Authorization: `Bearer ${token}` }
-          });
-      return response.data;
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
     } catch (error) {
-      console.error('Error fetching seasons:', error);
-      throw error;
+        console.error('Error fetching seasons:', error);
+        throw error;
     }
-  };
+};
+
+export const getSeasonById = async (id) => {
+    try {
+        const token = getToken();
+        const response = await auth.get(`/admin/seasons/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching season by ID:', error);
+        throw error;
+    }
+};
+
+export const getAllSeasonsRelations = async () => {
+    try {
+        const token = getToken();
+        const response = await auth.get('/admin/seasons-relation', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching seasons relations:', error);
+        throw error;
+    }
+};
+
+export const getSeasonsRelationById = async (id) => {
+    try {
+        const token = getToken();
+        const response = await auth.get(`/admin/seasons-relation/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching seasons relation:', error);
+        throw error;
+    }
+};
 
 export const getDistricts = async () => {
-  try {
-    const token = getToken();
-    const response = await auth.get('/admin/districts', {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching tourism data:', error);
-    throw error;
-  }
+    try {
+        const token = getToken();
+        const response = await auth.get('/admin/districts', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching tourism data:', error);
+        throw error;
+    }
 };
 
 export const getCategories = async () => {
-  try {
-    const token = getToken();
-    const response = await auth.get('/admin/categories', {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching tourism data:', error);
-    throw error;
-  }
+    try {
+        const token = getToken();
+        const response = await auth.get('/admin/categories', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching tourism data:', error);
+        throw error;
+    }
 };
 
 export const getCategoryById = async (id) => {
     try {
-    const token = getToken();
-      const response = await auth.get(`/admin/categories/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      return response.data;
+        const token = getToken();
+        const response = await auth.get(`/admin/categories/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
     } catch (error) {
-      console.error('Error fetching category:', error);
-      throw error;
+        console.error('Error fetching category:', error);
+        throw error;
     }
-  };
+};
 
-  
-  // Fetch tourism data by ID
-  export const getFetchTourismDataById = async (id) => {
+export const getDistrictById = async (id) => {
     try {
-      const response = await auth.get(`/admin/place/${id}`);
-      return response.data;
+        const token = getToken();
+        const response = await auth.get(`/admin/districts/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
     } catch (error) {
-      console.error('Error fetching tourism data:', error);
-      throw error;
+        console.error('Error fetching district by ID:', error);
+        throw error;
     }
-  };
-  
-  // Fetch nearby tourism data
-  export const getNearbyFetchTourismData = async (id) => {
+};
+
+export const getAllOperatingHours = async () => {
     try {
-      const response = await auth.get(`/admin/place/${id}/nearby`);
-      return response.data;
+        const token = getToken();
+        const response = await auth.get('/admin/time', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
     } catch (error) {
-      console.error('Error fetching tourism data:', error);
-      throw error;
+        console.error('Error fetching operating hours:', error);
+        throw error;
     }
-  };
-  
-  // Fetch tourism data by category
-  export const getFetchTourismDataByCategory = async (categoryId) => {
+};
+
+export const getOperatingHoursById = async (id) => {
     try {
-      const response = await auth.get(`/admin/category/${categoryId}/place`);
-      return response.data;
+        const token = getToken();
+        const response = await auth.get(`/admin/time/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
     } catch (error) {
-      console.error('Error fetching tourism data:', error);
-      throw error;
+        console.error('Error fetching operating hour:', error);
+        throw error;
     }
-  };
-  
-  // Fetch tourism data by district
-  export const getFetchTourismDataByDistrict = async (districtId) => {
+};
+
+// Fetch tourism data by ID
+export const getFetchTourismDataById = async (id) => {
     try {
-      const response = await auth.get(`/admin/district/${districtId}/place`);
-      return response.data;
+        const response = await auth.get(`/admin/place/${id}`);
+        return response.data;
     } catch (error) {
-      console.error('Error fetching tourism data:', error);
-      throw error;
+        console.error('Error fetching tourism data:', error);
+        throw error;
     }
-  };
-  
-  // Fetch tourism data by season
-  export const getFetchTourismDataBySeason = async (seasonId) => {
+};
+
+// Fetch nearby tourism data
+export const getNearbyFetchTourismData = async (id) => {
     try {
-      const response = await auth.get(`/admin/season/${seasonId}/place`);
-      return response.data;
+        const response = await auth.get(`/admin/place/${id}/nearby`);
+        return response.data;
     } catch (error) {
-      console.error('Error fetching tourism data:', error);
-      throw error;
+        console.error('Error fetching tourism data:', error);
+        throw error;
     }
-  };
-  
+};
+
+// Fetch tourism data by category
+export const getFetchTourismDataByCategory = async (categoryId) => {
+    try {
+        const response = await auth.get(`/admin/category/${categoryId}/place`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching tourism data:', error);
+        throw error;
+    }
+};
+
+// Fetch tourism data by district
+export const getFetchTourismDataByDistrict = async (districtId) => {
+    try {
+        const response = await auth.get(`/admin/district/${districtId}/place`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching tourism data:', error);
+        throw error;
+    }
+};
+
+// Fetch tourism data by season
+export const getFetchTourismDataBySeason = async (seasonId) => {
+    try {
+        const response = await auth.get(`/admin/season/${seasonId}/place`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching tourism data:', error);
+        throw error;
+    }
+};

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createSeasonsRelation } from '@/utils/auth/admin/add/api';
-import { getSeasons, getPlace } from '@/utils/auth/admin/get/api';
+import { getSeasons, getPlaces } from '@/utils/auth/admin/get/api';
 
 const AddSeasonsRelationForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -14,7 +14,7 @@ const AddSeasonsRelationForm = () => {
     const fetchData = async () => {
       try {
         const seasonsData = await getSeasons();
-        const touristEntitiesData = await getPlace();
+        const touristEntitiesData = await getPlaces();
         setSeasons(seasonsData);
         setTouristEntities(touristEntitiesData);
       } catch (error) {
@@ -50,7 +50,7 @@ const AddSeasonsRelationForm = () => {
             >
               <option value="">Select a season</option>
               {seasons.map((season) => (
-                <option key={season.id} value={season.id}>{season.name}</option>
+                <option key={season.id} value={season.id}> (ID: {season.id}){season.name}</option>
               ))}
             </select>
             {errors.season_id && <p className="text-red-500 text-xs mt-1">Season is required.</p>}

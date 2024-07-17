@@ -2,36 +2,36 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getCategories } from '@/utils/auth/admin/get/api';
+import { getDistricts } from '@/utils/auth/admin/get/api';
 
-const CategoriesPage = () => {
-  const [categories, setCategories] = useState([]);
+const DistrictsPage = () => {
+  const [districts, setDistricts] = useState([]);
   const [error, setError] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchDistricts = async () => {
       try {
-        const result = await getCategories();
-        setCategories(result);
+        const result = await getDistricts();
+        setDistricts(result);
       } catch (err) {
         setError(err.message);
       }
     };
 
-    fetchCategories();
+    fetchDistricts();
   }, []);
 
   if (error) return <div className="text-red-500">Error: {error}</div>;
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-8 text-center">Categories</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center">Districts</h1>
       <button
-        onClick={() => router.push('/dashboard/table/categories/add')}
+        onClick={() => router.push('/dashboard/table/districts/add')}
         className="mb-4 bg-green-600 text-white px-4 py-2 rounded-md"
       >
-        Add New Categories
+        Add New Districts
       </button>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200">
@@ -49,13 +49,13 @@ const CategoriesPage = () => {
             </tr>
           </thead>
           <tbody>
-            {categories.map((category, index) => (
-              <tr key={category.id} className="hover:bg-gray-100 transition duration-300 ease-in-out">
-                <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{category.id}</td>
-                <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{category.name}</td>
+            {districts.map((district) => (
+              <tr key={district.id} className="hover:bg-gray-100 transition duration-300 ease-in-out">
+                <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{district.id}</td>
+                <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{district.name}</td>
                 <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                   <button
-                    onClick={() => router.push(`/dashboard/table/categories/edit/${category.id}`)}
+                    onClick={() => router.push(`/dashboard/table/districts/edit/${district.id}`)}
                     className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300 ease-in-out"
                   >
                     Edit
@@ -70,4 +70,4 @@ const CategoriesPage = () => {
   );
 };
 
-export default CategoriesPage;
+export default DistrictsPage;

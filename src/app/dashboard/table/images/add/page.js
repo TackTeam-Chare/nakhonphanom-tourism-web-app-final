@@ -38,6 +38,12 @@ export default function UploadImages() {
     <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-4">Upload Images</h1>
+        <button
+        onClick={() => router.push('/dashboard/table/images/add')}
+        className="mb-4 bg-green-600 text-white px-4 py-2 rounded-md"
+      >
+        Add New Images
+      </button>
         {message && <p className="mb-4 text-green-500">{message}</p>}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
