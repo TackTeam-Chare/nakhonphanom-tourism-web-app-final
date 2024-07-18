@@ -1,21 +1,25 @@
 "use client";
-import React, { useState } from 'react';
-import { login } from '@/utils/auth/auth';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { login } from "@/utils/auth/auth";
 
 export default function AdminLogin() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [alert, setAlert] = useState({ type: "", message: "" });
+  const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await login({ username, password });
-      console.log('Login successful:', response);
-      // Store token in local storage
-      localStorage.setItem('token', response.token);
-      // Redirect or navigate to profile page
+      console.log("Login successful:", response);
+      localStorage.setItem("token", response.token);
+      setAlert({ type: "success", message: "Login successful!" });
+      router.push("../../dashboard");
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error("Login failed:", error);
+      setAlert({ type: "error", message: "Login failed. Please try again." });
     }
   };
 
@@ -37,7 +41,7 @@ export default function AdminLogin() {
             <label
               htmlFor="username"
               className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6 ${
-                username ? 'scale-75 -translate-y-6' : ''
+                username ? "scale-75 -translate-y-6" : ""
               }`}
             >
               Username
@@ -56,7 +60,7 @@ export default function AdminLogin() {
             <label
               htmlFor="password"
               className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6 ${
-                password ? 'scale-75 -translate-y-6' : ''
+                password ? "scale-75 -translate-y-6" : ""
               }`}
             >
               Password
@@ -88,6 +92,16 @@ export default function AdminLogin() {
               Sign in
             </button>
           </div>
+          {alert.message && (
+          <div
+            className={`${
+              alert.type === "success" ? "bg-green-100 border-green-400 text-green-700" : "bg-red-100 border-red-400 text-red-700"
+            } border px-4 py-3 rounded relative mb-4`}
+            role="alert"
+          >
+            <span className="block sm:inline">{alert.message}</span>
+          </div>
+        )}
         </form>
       </div>
     </section>
