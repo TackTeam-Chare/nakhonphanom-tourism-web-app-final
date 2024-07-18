@@ -31,6 +31,7 @@ export const updateTouristEntity = async (id, data) => {
     }
 };
 
+
 export const updateTourismImages = async (id, data) => {
     try {
         const token = getToken();
