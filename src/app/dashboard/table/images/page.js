@@ -1,5 +1,3 @@
-// src/app/dashboard/table/images/page.js
-
 'use client';
 import React, { useEffect, useState } from 'react';
 import { getPlaceImages } from '@/utils/auth/admin/get/api';
@@ -27,7 +25,7 @@ const ImagesIndexPage = () => {
         <div className="grid grid-cols-3 gap-4">
           {images.map((image) => (
             <div key={image.id} className="bg-gray-200 p-4 rounded-lg">
-              <img src={image.image_path} alt={image.image_path} className="w-full h-48 object-cover rounded-lg" />
+              <img src={image.image_url} alt={image.image_path} className="w-full h-48 object-cover rounded-lg" />
               <p className="mt-2 text-gray-700">{image.tourism_entities_id}</p>
             </div>
           ))}

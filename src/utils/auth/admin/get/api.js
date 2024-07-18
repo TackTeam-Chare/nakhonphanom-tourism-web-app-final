@@ -61,22 +61,25 @@ export const getPlaceById = async (id) => {
     }
   };
 
-
-  export const getPlaceImages = async () => {
+export const getPlaceImages = async () => {
     try {
         const token = getToken();
-        const response = await auth.get('/admin/place/images', {
+        const response = await auth.get('/admin/images', {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         });
-        return response.data;
+        const data = Array.isArray(response.data) ? response.data : [];
+
+        return data.map(place => ({
+            ...place,
+            image_url: place.image_path ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${place.image_path}` : null,
+        }));
     } catch (error) {
-        console.error('Error fetching images:', error);
+        console.error('Error fetching places:', error);
         throw error;
     }
 };
-
 
 export const getSeasons = async () => {
     try {

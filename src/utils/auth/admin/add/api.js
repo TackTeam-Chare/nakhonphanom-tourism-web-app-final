@@ -33,7 +33,7 @@ export const createTouristEntity = async (data) => {
 export const uploadTourismImages = async (data) => {
   try {
     const token = getToken();
-    const response = await auth.post('/admin/place/images', data, {
+    const response = await auth.post('/admin/images', data, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',
