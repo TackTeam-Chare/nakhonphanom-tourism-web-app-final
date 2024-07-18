@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter, useParams } from 'next/navigation';
-import { getSeasonsRelationById } from '@/utils/auth/admin/get/api';
+import { getSeasonsRelationById, getSeasons, getPlaceById } from '@/utils/auth/admin/get/api';
 import { updateSeasonsRelation } from '@/utils/auth/admin/edit/api';
 
 const EditSeasonsRelationPage = () => {
@@ -11,13 +11,23 @@ const EditSeasonsRelationPage = () => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
+  const [seasons, setSeasons] = useState([]);
+  const [placeName, setPlaceName] = useState("");
 
   useEffect(() => {
     const fetchRelation = async () => {
       try {
-        const relation = await getSeasonsRelationById(id);
+        const [relation, seasonsData] = await Promise.all([
+          getSeasonsRelationById(id),
+          getSeasons()
+        ]);
         setValue('season_id', relation.season_id);
         setValue('tourism_entities_id', relation.tourism_entities_id);
+
+        const placeData = await getPlaceById(relation.tourism_entities_id);
+        setPlaceName(`ID: ${placeData.id} ${placeData.name} `);
+
+        setSeasons(seasonsData);
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching relation:', error);
@@ -49,26 +59,30 @@ const EditSeasonsRelationPage = () => {
         <h2 className="text-2xl font-bold mb-5 text-center">Update Seasons Relation</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
-            <label htmlFor="season_id" className="block text-sm font-medium text-gray-700">Season ID</label>
-            <input
+            <label htmlFor="season_id" className="block text-sm font-medium text-gray-700">Season</label>
+            <select
               id="season_id"
               name="season_id"
-              type="text"
               {...register('season_id', { required: true })}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
-            {errors.season_id && <p className="text-red-500 text-xs mt-1">Season ID is required.</p>}
+            >
+              <option value="">Select Season</option>
+              {seasons.map(season => (
+                <option key={season.id} value={season.id}>{season.name}</option>
+              ))}
+            </select>
+            {errors.season_id && <p className="text-red-500 text-xs mt-1">Season is required.</p>}
           </div>
           <div className="mb-4">
-            <label htmlFor="tourism_entities_id" className="block text-sm font-medium text-gray-700">Tourism Entities ID</label>
+            <label htmlFor="tourism_entities_id" className="block text-sm font-medium text-gray-700">Tourism Entity</label>
             <input
               id="tourism_entities_id"
               name="tourism_entities_id"
               type="text"
-              {...register('tourism_entities_id', { required: true })}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              value={placeName}
+              readOnly
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-200 cursor-not-allowed"
             />
-            {errors.tourism_entities_id && <p className="text-red-500 text-xs mt-1">Tourism Entities ID is required.</p>}
           </div>
           <div>
             <button

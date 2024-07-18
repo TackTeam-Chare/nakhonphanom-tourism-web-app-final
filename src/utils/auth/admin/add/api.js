@@ -30,6 +30,22 @@ export const createTouristEntity = async (data) => {
   }
 };
 
+export const uploadTourismImages = async (data) => {
+  try {
+    const token = getToken();
+    const response = await auth.post('/admin/place/images', data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error uploading tourism images:', error);
+    throw error;
+  }
+};
+
 export const createCategory = async (data) => {
   try {
     const token = getToken();

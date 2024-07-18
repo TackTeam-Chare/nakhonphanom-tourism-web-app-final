@@ -15,16 +15,31 @@ const TableIndexPage = () => {
   ];
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-8 text-center">Dashboard Tables</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {tables.map((table) => (
-          <Link key={table.name} href={table.path} legacyBehavior>
-            <a className="block bg-white rounded-lg shadow-lg overflow-hidden p-6 hover:bg-indigo-600 hover:text-white transition-colors duration-300">
-              <h2 className="text-2xl font-bold mb-2 text-center">{table.name}</h2>
-            </a>
-          </Link>
-        ))}
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="container mx-auto p-4">
+        <h1 className="text-3xl font-bold mb-8 text-center text-indigo-600">Dashboard Tables</h1>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white rounded-lg shadow-lg">
+            <thead>
+              <tr className="w-full bg-indigo-600 text-white">
+                <th className="text-left py-3 px-4 uppercase font-semibold text-sm">Table Name</th>
+                <th className="text-left py-3 px-4 uppercase font-semibold text-sm">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tables.map((table, index) => (
+                <tr key={index} className="hover:bg-gray-100">
+                  <td className="text-left py-3 px-4">{table.name}</td>
+                  <td className="text-left py-3 px-4">
+                    <Link className="text-indigo-600 hover:text-indigo-900 transition-colors duration-300" href={table.path}>
+                      View
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

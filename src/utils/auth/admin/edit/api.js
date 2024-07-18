@@ -18,10 +18,31 @@ const getToken = () => localStorage.getItem('token');
 
 export const updateTouristEntity = async (id, data) => {
     try {
-        const response = await auth.put(`/place/${id}`, data);
+        const token = getToken();
+        const response = await auth.put(`admin/place/${id}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         return response.data;
     } catch (error) {
         console.error('Error updating tourist entity:', error);
+        throw error;
+    }
+};
+
+export const updateTourismImages = async (id, data) => {
+    try {
+        const token = getToken();
+        const response = await auth.put(`/admin/place/images/${id}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error updating tourism images:', error);
         throw error;
     }
 };
@@ -91,6 +112,21 @@ export const updateSeasonsRelation = async (id, data) => {
     try {
         const token = getToken()
         const response = await auth.put(`/admin/seasons-relation/${id}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error updating seasons relation:', error);
+        throw error;
+    }
+};
+
+export const updateTourismEntitiesImages = async (id, data) => {
+    try {
+        const token = getToken()
+        const response = await auth.put(`/admin/place/images/${id}`, data, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

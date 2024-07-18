@@ -25,22 +25,59 @@ export const getPlaces = async () => {
                 Authorization: `Bearer ${token}`
             }
         });
-        return response.data;
+        const data = Array.isArray(response.data) ? response.data : [];
+
+        return data.map(place => ({
+            ...place,
+            image_url: place.image_path ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${place.image_path}` : null,
+        }));
     } catch (error) {
-        console.error('Error fetching tourism data:', error);
+        console.error('Error fetching places:', error);
         throw error;
     }
 };
 
 export const getPlaceById = async (id) => {
     try {
-        const response = await auth.get(`admin/place/${id}`);
+      const token = getToken();
+      const response = await auth.get(`/admin/place/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      const place = response.data;
+
+      if (place && Array.isArray(place.images)) {
+        place.images = place.images.map(image => ({
+          ...image,
+          image_url: image.image_path ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${image.image_path}` : null,
+        }));
+      }
+
+      return place;
+    } catch (error) {
+      console.error('Error fetching tourist entity:', error);
+      throw error;
+    }
+  };
+
+
+  export const getPlaceImages = async () => {
+    try {
+        const token = getToken();
+        const response = await auth.get('/admin/place/images', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         return response.data;
     } catch (error) {
-        console.error('Error fetching tourist entity:', error);
+        console.error('Error fetching images:', error);
         throw error;
     }
 };
+
+
 export const getSeasons = async () => {
     try {
         const token = getToken();

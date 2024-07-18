@@ -3,14 +3,16 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter, useParams } from 'next/navigation';
-import { getOperatingHoursById } from '@/utils/auth/admin/get/api';
+import { getOperatingHoursById, getPlaces } from '@/utils/auth/admin/get/api';
 import { updateOperatingHours } from '@/utils/auth/admin/edit/api';
 
 const EditOperatingHoursPage = () => {
   const { id } = useParams();
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
   const router = useRouter();
+  const [places, setPlaces] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [placeName, setPlaceName] = useState('');
 
   useEffect(() => {
     const fetchOperatingHour = async () => {
@@ -20,9 +22,15 @@ const EditOperatingHoursPage = () => {
         setValue('day_of_week', operatingHour.day_of_week);
         setValue('opening_time', operatingHour.opening_time);
         setValue('closing_time', operatingHour.closing_time);
-        setIsLoading(false);
+
+        const placesData = await getPlaces();
+        const place = placesData.find(p => p.id === operatingHour.place_id);
+        if (place) {
+          setPlaceName(`ID: ${place.id} - ${place.name}`);
+        }
       } catch (error) {
         console.error('Error fetching operating hour:', error);
+      } finally {
         setIsLoading(false);
       }
     };
@@ -51,21 +59,23 @@ const EditOperatingHoursPage = () => {
         <h2 className="text-2xl font-bold mb-5 text-center">Update Operating Hour</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
-            <label htmlFor="place_id" className="block text-sm font-medium text-gray-700">Place ID</label>
+            <label htmlFor="place_id" className="block text-sm font-medium text-gray-700">Place</label>
             <input
               id="place_id"
-              name="place_id"
-              type="text"
-              {...register('place_id', { required: true })}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              value={placeName}
+              readOnly
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-200 cursor-not-allowed"
             />
-            {errors.place_id && <p className="text-red-500 text-xs mt-1">Place ID is required.</p>}
+            <input
+              type="hidden"
+              {...register('place_id', { required: true })}
+            />
+            {errors.place_id && <p className="text-red-500 text-xs mt-1">Place is required.</p>}
           </div>
           <div className="mb-4">
             <label htmlFor="day_of_week" className="block text-sm font-medium text-gray-700">Day of Week</label>
             <select
               id="day_of_week"
-              name="day_of_week"
               {...register('day_of_week', { required: true })}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             >
