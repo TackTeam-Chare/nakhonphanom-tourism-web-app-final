@@ -38,7 +38,7 @@ const PlaceIndexPage = () => {
     }
   };
 
-  if (error) return <div className="text-red-500">Error: {error}</div>;
+  // if (error) return <div className="text-red-500">Error: {error}</div>;
 
   return (
     <div className="container mx-auto p-4">
