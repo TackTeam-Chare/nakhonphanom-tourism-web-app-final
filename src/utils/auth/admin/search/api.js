@@ -60,9 +60,10 @@ export const searchByCategory = async (categoryId) => {
             headers: { Authorization: `Bearer ${token}` }
         });
         const data = Array.isArray(response.data) ? response.data : [];
+
         return data.map(place => ({
-            ...place,
-            image_url: Array.isArray(place.images) ? place.images.map(image => `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${image}`) : [],
+          ...place,
+          image_url: place.image_url ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${place.image_url}` : null,
         }));
     } catch (error) {
         console.error('Error searching by category:', error);
@@ -77,9 +78,10 @@ export const searchByDistrict = async (districtId) => {
             headers: { Authorization: `Bearer ${token}` }
         });
         const data = Array.isArray(response.data) ? response.data : [];
+
         return data.map(place => ({
-            ...place,
-            image_url: Array.isArray(place.images) ? place.images.map(image => `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${image}`) : [],
+          ...place,
+          image_url: place.image_url ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${place.image_url}` : null,
         }));
     } catch (error) {
         console.error('Error searching by district:', error);
@@ -94,9 +96,10 @@ export const searchBySeason = async (seasonId) => {
             headers: { Authorization: `Bearer ${token}` }
         });
         const data = Array.isArray(response.data) ? response.data : [];
+
         return data.map(place => ({
-            ...place,
-            image_url: Array.isArray(place.images) ? place.images.map(image => `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${image}`) : [],
+          ...place,
+          image_url: place.image_url ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${place.image_url}` : null,
         }));
     } catch (error) {
         console.error('Error searching by season:', error);
@@ -111,9 +114,10 @@ export const searchPlaces = async (query) => {
             headers: { Authorization: `Bearer ${token}` }
         });
         const data = Array.isArray(response.data) ? response.data : [];
+
         return data.map(place => ({
-            ...place,
-            image_url: Array.isArray(place.images) ? place.images.map(image => `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${image}`) : [],
+          ...place,
+          image_url: place.image_url ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${place.image_url}` : null,
         }));
     } catch (error) {
         console.error('Error searching places:', error);
@@ -128,7 +132,7 @@ export const searchByTime = async (day_of_week, opening_time, closing_time) => {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = Array.isArray(response.data) ? response.data : [];
-  
+
       return data.map(place => ({
         ...place,
         image_url: place.image_url ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${place.image_url}` : null,
