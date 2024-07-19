@@ -109,21 +109,23 @@ export const searchBySeason = async (seasonId) => {
 
 export const searchPlaces = async (query) => {
     try {
-        const token = getToken();
-        const response = await auth.get(`/admin/search?q=${query}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        const data = Array.isArray(response.data) ? response.data : [];
-
-        return data.map(place => ({
-          ...place,
-          image_url: place.image_url ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${place.image_url}` : null,
-        }));
+      const token = getToken();
+      const response = await auth.get(`/admin/search?q=${query}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = Array.isArray(response.data) ? response.data : [];
+  
+      return data.map(place => ({
+        ...place,
+        image_url: typeof place.image_url === 'string'
+          ? place.image_url.split(',').map(imagePath => `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${imagePath.trim()}`)
+          : []
+      }));
     } catch (error) {
-        console.error('Error searching places:', error);
-        throw error;
+      console.error('Error searching places:', error);
+      throw error;
     }
-};
+  };
 
 export const searchByTime = async (day_of_week, opening_time, closing_time) => {
     try {
