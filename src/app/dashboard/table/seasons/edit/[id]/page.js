@@ -18,8 +18,8 @@ const EditSeasonPage = () => {
       try {
         const season = await getSeasonById(id);
         setValue('name', season.name);
-        setValue('date_start', season.date_start);
-        setValue('date_end', season.date_end);
+        setValue('date_start', season.date_start.split('T')[0]);
+        setValue('date_end', season.date_end.split('T')[0]);
         setIsLoading(false);
       } catch (error) {
         setError('Error fetching season details');
