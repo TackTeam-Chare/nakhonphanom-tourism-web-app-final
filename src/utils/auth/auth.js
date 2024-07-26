@@ -15,6 +15,7 @@ auth.interceptors.request.use((config) => {
 
 // ฟังก์ชันสำหรับ get token จาก localStorage
 const getToken = () => localStorage.getItem('token');
+
 export const login = async (data) => {
   try {
     const response = await auth.post('/auth/login', data);
@@ -90,80 +91,11 @@ export const logout = async () => {
   }
 };
 
-export const getAllFetchTourismData = async () => {
-  try {
-    const token = getToken();
-    const response = await auth.get('/admin/place', {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching tourism data:', error);
-    throw error;
-  }
-};
 
-export const getFetchTourismDataById = async (id) => {
-  try {
-    const token = getToken();
-    const response = await auth.get(`/admin/place/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching tourism data:', error);
-    throw error;
-  }
-};
 
-export const getNearbyFetchTourismData = async (id) => {
-  try {
-    const token = getToken();
-    const response = await auth.get(`/admin/place/${id}/nearby`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching tourism data:', error);
-    throw error;
-  }
-};
 
-export const getFetchTourismDataByCategory = async (categoryId) => {
-  try {
-    const token = getToken();
-    const response = await auth.get(`/admin/category/${categoryId}/place`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching tourism data:', error);
-    throw error;
-  }
-};
 
-export const getFetchTourismDataByDistrict = async (districtId) => {
-  try {
-    const token = getToken();
-    const response = await auth.get(`/admin/district/${districtId}/place`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching tourism data:', error);
-    throw error;
-  }
-};
 
-export const getFetchTourismDataBySeason = async (seasonId) => {
-  try {
-    const token = getToken();
-    const response = await auth.get(`/admin/season/${seasonId}/place`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching tourism data:', error);
-    throw error;
-  }
-};
+
+
+

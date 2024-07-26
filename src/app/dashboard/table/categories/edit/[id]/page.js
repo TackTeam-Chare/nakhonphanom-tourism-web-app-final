@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRouter, useParams } from 'next/navigation';  
+import { useRouter, useParams } from 'next/navigation';
 import { updateCategory } from '@/utils/auth/admin/edit/api';
 import { getCategoryById } from '@/utils/auth/admin/get/api';
 

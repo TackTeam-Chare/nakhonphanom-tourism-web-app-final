@@ -278,7 +278,7 @@ export default function EditPlace() {
                           style={{ objectFit: 'cover' }}
                           alt={`Existing image ${index + 1}`}
                           className="rounded-md"
-                          priority={index === 0} // Set priority for the first image
+                          priority={index === 0}
                         />
                       )}
                     </div>
