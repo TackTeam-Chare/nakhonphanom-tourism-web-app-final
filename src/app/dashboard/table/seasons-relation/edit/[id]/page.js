@@ -25,7 +25,7 @@ const EditSeasonsRelationPage = () => {
         setValue('tourism_entities_id', relation.tourism_entities_id);
 
         const placeData = await getPlaceById(relation.tourism_entities_id);
-        setPlaceName(`ID: ${placeData.id} ${placeData.name} `);
+        setPlaceName(`ID: ${placeData.id} ${placeData.name}`);
 
         setSeasons(seasonsData);
         setIsLoading(false);
@@ -54,26 +54,26 @@ const EditSeasonsRelationPage = () => {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">
-      <div className="w-full max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-5 text-center">Update Seasons Relation</h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mb-4">
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 p-4">
+      <div className="max-w-lg w-full bg-white p-8 rounded-lg shadow-md overflow-hidden">
+        <h2 className="text-2xl font-bold mb-5 text-center text-indigo-600">Update Seasons Relation</h2>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div className="relative z-0 w-full mb-6 group">
             <label htmlFor="season_id" className="block text-sm font-medium text-gray-700">Season</label>
             <select
               id="season_id"
               name="season_id"
-              {...register('season_id', { required: true })}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              {...register('season_id', { required: 'Season is required' })}
+              className="block mt-1 w-full py-2 px-3 bg-white border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             >
               <option value="">Select Season</option>
               {seasons.map(season => (
                 <option key={season.id} value={season.id}>{season.name}</option>
               ))}
             </select>
-            {errors.season_id && <p className="text-red-500 text-xs mt-1">Season is required.</p>}
+            {errors.season_id && <p className="text-red-500 text-xs mt-1">{errors.season_id.message}</p>}
           </div>
-          <div className="mb-4">
+          <div className="relative z-0 w-full mb-6 group">
             <label htmlFor="tourism_entities_id" className="block text-sm font-medium text-gray-700">Tourism Entity</label>
             <input
               id="tourism_entities_id"
@@ -81,20 +81,18 @@ const EditSeasonsRelationPage = () => {
               type="text"
               value={placeName}
               readOnly
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-200 cursor-not-allowed"
+              className="block mt-1 w-full py-2 px-3 bg-gray-200 border border-gray-300 rounded-md shadow-sm sm:text-sm cursor-not-allowed"
             />
           </div>
-          <div>
-            <button
-              type="submit"
-              className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Update Seasons Relation
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="w-full py-2 px-4 bg-indigo-600 text-white font-medium rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Update Seasons Relation
+          </button>
         </form>
       </div>
-    </div>
+    </section>
   );
 };
 

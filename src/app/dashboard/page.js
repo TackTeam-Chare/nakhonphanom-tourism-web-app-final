@@ -1,9 +1,11 @@
 // Example: src/app/dashboard/table/place/page.js
 "use client";
-import React, { useState, useEffect } from "react";
+import{ React,  useState, useEffect } from "react";
 import { getPlaces } from "@/utils/auth/admin/get/api";
 import SearchBar from '@/components/actions/SearchBar';
 import DropdownSearch from '@/components/actions/DropdownSearch';
+
+
 const ManagePlaces = () => {
   const [places, setPlaces] = useState([]);
 

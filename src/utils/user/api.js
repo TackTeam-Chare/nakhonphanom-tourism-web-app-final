@@ -33,20 +33,10 @@ export const getFetchTourismDataById = async (id) => {
 };
 
 
-export const getNearbyFetchTourismData = async (id, radius = 1500) => {
+export const getNearbyFetchTourismData = async (id, radius = 5000) => {
   try {
-    const response = await api.get(`/place/${id}/nearby?radius=${radius}`);
+    const response = await api.get(`/place/nearby/${id}?radius=${radius}`);
     const { entity, nearbyEntities } = response.data;
-
-    // Update the image path for the main entity
-    entity.image_path = entity.image_path ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${entity.image_path}` : '';
-
-    // Update the image paths for nearby entities
-    nearbyEntities.forEach(entity => {
-      if (entity.image_path) {
-        entity.image_path = entity.image_path.split(',').map(path => `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${path}`);
-      }
-    });
 
     return { entity, nearbyEntities };
   } catch (error) {
@@ -54,10 +44,11 @@ export const getNearbyFetchTourismData = async (id, radius = 1500) => {
     throw error;
   }
 };
+
 // ดึงสถานที่ตามหมวดหมู่
 export const getFetchTourismDataByCategory = async (id) => {
   try {
-    const response = await api.get(`/place/category/${id}`);
+    const response = await api.get(`/categories/${id}/place`);
     return Array.isArray(response.data) ? response.data.map(entity => ({
       ...entity,
       image_path: `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${entity.image_path}`
@@ -85,7 +76,7 @@ export const getFetchTourismDataByDistrict = async (id) => {
 // ดึงสถานที่ตามฤดูกาล
 export const getFetchTourismDataBySeason = async (id) => {
   try {
-    const response = await api.get(`/season/${id}/place`);
+    const response = await api.get(`/seasons/${id}/place`);
     return Array.isArray(response.data) ? response.data.map(entity => ({
       ...entity,
       image_path: `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${entity.image_path}`

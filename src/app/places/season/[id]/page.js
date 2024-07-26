@@ -1,6 +1,11 @@
 import React from 'react';
+import Image from 'next/image';
+import { getFetchTourismDataBySeason } from '@/utils/user/api'; // Adjust this import path as necessary
 
-const TourismBySeason = ({ tourismData }) => {
+const Page = async ({ params }) => {
+  const { id } = params;
+  const tourismData = await getFetchTourismDataBySeason(id);
+
   if (!tourismData || tourismData.length === 0) {
     return <p>ไม่พบสถานที่ท่องเที่ยวในหมวดหมู่นี้</p>;
   }
@@ -20,8 +25,9 @@ const TourismBySeason = ({ tourismData }) => {
               <div className="image-gallery">
                 <p><strong>Images:</strong></p>
                 {place.images.split(',').map((image, index) => (
-                  <img
+                  <Image
                     key={index}
+                    width={500}height={300}
                     src={image}
                     alt={place.name}
                     className="w-full h-auto rounded-lg shadow-md mb-2"
@@ -46,7 +52,8 @@ const TourismBySeason = ({ tourismData }) => {
             {place.image_path && (
               <div className="image-path">
                 <p><strong>รูปภาพ:</strong></p>
-                <img
+                <Image
+                  width={500}height={300}
                   src={place.image_path}
                   alt={place.name}
                   className="w-full h-auto rounded-lg shadow-md mb-2"
@@ -67,4 +74,4 @@ const TourismBySeason = ({ tourismData }) => {
   );
 };
 
-export default TourismBySeason;
+export default Page;

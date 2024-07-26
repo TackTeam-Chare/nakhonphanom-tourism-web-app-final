@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { getPlaces} from '@/utils/auth/admin/get/api';
+import { getPlaces } from '@/utils/auth/admin/get/api';
 import { deletePlace } from '@/utils/auth/admin/delete/api';
 
 const PlaceIndexPage = () => {
@@ -38,8 +39,6 @@ const PlaceIndexPage = () => {
     }
   };
 
-  // if (error) return <div className="text-red-500">Error: {error}</div>;
-
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-8 text-center text-indigo-600">Tourist Places</h1>
@@ -63,10 +62,13 @@ const PlaceIndexPage = () => {
         {places.map((place) => (
           <div key={place.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
             {place.image_url && (
-              <img 
-                src={place.image_url} 
-                alt={place.name} 
+              <Image
+                width={500}
+                height={300}
+                src={place.image_url}
+                alt={place.name}
                 className="w-full h-48 object-cover"
+                priority={true} // Added priority for LCP image
               />
             )}
             <div className="p-6">

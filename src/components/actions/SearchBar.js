@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { searchPlaces } from '@/utils/auth/admin/search/api';
 
@@ -66,7 +67,7 @@ const SearchBar = () => {
               className="flex items-start p-4 cursor-pointer hover:bg-gray-100 transition-colors duration-150 ease-in-out"
               onClick={() => handleSelect(result.id)}
             >
-              <img src={result.image_url[0]} alt={result.name} className="w-16 h-16 object-cover rounded mr-4" />
+              <Image  width={500}height={300} src={result.image_url[0]} alt={result.name} className="w-16 h-16 object-cover rounded mr-4" />
               <div>
                 <p className="text-lg font-semibold">{result.name}</p>
                 <p className="text-sm text-gray-500">{result.category_name} - {result.district_name}</p>

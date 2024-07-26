@@ -18,41 +18,65 @@ const AddSeasonForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">
-      <div className="w-full max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md">
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 p-4">
+      <div className="max-w-lg w-full bg-white rounded-lg shadow-md overflow-hidden p-8">
         <h2 className="text-2xl font-bold mb-5 text-center">Add New Season</h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Season Name</label>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div className="relative z-0 w-full mb-6 group">
             <input
               id="name"
               name="name"
               type="text"
               {...register('name', { required: true })}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
+              placeholder=" "
             />
+            <label
+              htmlFor="name"
+              className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6 ${
+                errors.name ? 'text-red-500' : ''
+              }`}
+            >
+              Season Name
+            </label>
             {errors.name && <p className="text-red-500 text-xs mt-1">Season name is required.</p>}
           </div>
-          <div className="mb-4">
-            <label htmlFor="date_start" className="block text-sm font-medium text-gray-700">Start Date</label>
+          <div className="relative z-0 w-full mb-6 group">
             <input
               id="date_start"
               name="date_start"
               type="date"
               {...register('date_start', { required: true })}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
+              placeholder=" "
             />
+            <label
+              htmlFor="date_start"
+              className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6 ${
+                errors.date_start ? 'text-red-500' : ''
+              }`}
+            >
+              Start Date
+            </label>
             {errors.date_start && <p className="text-red-500 text-xs mt-1">Start date is required.</p>}
           </div>
-          <div className="mb-4">
-            <label htmlFor="date_end" className="block text-sm font-medium text-gray-700">End Date</label>
+          <div className="relative z-0 w-full mb-6 group">
             <input
               id="date_end"
               name="date_end"
               type="date"
               {...register('date_end', { required: true })}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
+              placeholder=" "
             />
+            <label
+              htmlFor="date_end"
+              className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6 ${
+                errors.date_end ? 'text-red-500' : ''
+              }`}
+            >
+              End Date
+            </label>
             {errors.date_end && <p className="text-red-500 text-xs mt-1">End date is required.</p>}
           </div>
           <div>
@@ -65,7 +89,7 @@ const AddSeasonForm = () => {
           </div>
         </form>
       </div>
-    </div>
+    </section>
   );
 };
 

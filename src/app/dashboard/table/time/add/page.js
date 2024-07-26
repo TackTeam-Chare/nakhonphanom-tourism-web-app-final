@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createOperatingHours } from '@/utils/auth/admin/add/api';
-import { getPlaces } from '@/utils/auth/admin/get/api'; 
+import { getPlaces } from '@/utils/auth/admin/get/api';
 
 const AddOperatingHoursForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -12,7 +12,7 @@ const AddOperatingHoursForm = () => {
   useEffect(() => {
     const fetchPlaces = async () => {
       try {
-        const placesData = await getPlaces(); 
+        const placesData = await getPlaces();
         setPlaces(placesData);
       } catch (error) {
         console.error('Error fetching places:', error);
@@ -33,11 +33,11 @@ const AddOperatingHoursForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">
-      <div className="w-full max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md">
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 p-4">
+      <div className="max-w-lg w-full bg-white rounded-lg shadow-md overflow-hidden p-8">
         <h2 className="text-2xl font-bold mb-5 text-center">Add Operating Hours</h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mb-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div className="relative z-0 w-full mb-6 group">
             <label htmlFor="place_id" className="block text-sm font-medium text-gray-700">Place</label>
             <select
               id="place_id"
@@ -48,13 +48,13 @@ const AddOperatingHoursForm = () => {
               <option value="">Select a place</option>
               {places.map((place) => (
                 <option key={place.id} value={place.id}>
-                 (ID: {place.id}) {place.name} 
+                  (ID: {place.id}) {place.name}
                 </option>
               ))}
             </select>
             {errors.place_id && <p className="text-red-500 text-xs mt-1">Place is required.</p>}
           </div>
-          <div className="mb-4">
+          <div className="relative z-0 w-full mb-6 group">
             <label htmlFor="day_of_week" className="block text-sm font-medium text-gray-700">Day of the Week</label>
             <select
               id="day_of_week"
@@ -73,7 +73,7 @@ const AddOperatingHoursForm = () => {
             </select>
             {errors.day_of_week && <p className="text-red-500 text-xs mt-1">Day of the week is required.</p>}
           </div>
-          <div className="mb-4">
+          <div className="relative z-0 w-full mb-6 group">
             <label htmlFor="opening_time" className="block text-sm font-medium text-gray-700">Opening Time</label>
             <input
               id="opening_time"
@@ -84,7 +84,7 @@ const AddOperatingHoursForm = () => {
             />
             {errors.opening_time && <p className="text-red-500 text-xs mt-1">Opening time is required.</p>}
           </div>
-          <div className="mb-4">
+          <div className="relative z-0 w-full mb-6 group">
             <label htmlFor="closing_time" className="block text-sm font-medium text-gray-700">Closing Time</label>
             <input
               id="closing_time"
@@ -105,7 +105,7 @@ const AddOperatingHoursForm = () => {
           </div>
         </form>
       </div>
-    </div>
+    </section>
   );
 };
 

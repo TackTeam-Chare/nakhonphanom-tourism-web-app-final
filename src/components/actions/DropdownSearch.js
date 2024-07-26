@@ -1,9 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { searchByCategory, searchByDistrict, searchBySeason, searchByTime, fetchCategories, fetchDistricts, fetchSeasons } from '@/utils/auth/admin/search/api';
 
 const DropdownSearch = () => {
+  const router = useRouter();
   const [categories, setCategories] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [seasons, setSeasons] = useState([]);
@@ -50,6 +53,10 @@ const DropdownSearch = () => {
   const handleTimeSearch = async () => {
     const results = await searchByTime(dayOfWeek, openingTime, closingTime);
     setResults(results);
+  };
+
+  const handleSelect = (id) => {
+    router.push(`/tourism/nearby${id}`); 
   };
 
   return (
@@ -149,12 +156,12 @@ const DropdownSearch = () => {
       </div>
       <div className="results grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
         {results.map(result => (
-          <div key={result.id} className="result-item bg-gray-100 p-4 rounded-lg shadow-sm">
+          <div key={result.id} className="result-item bg-gray-100 p-4 rounded-lg shadow-sm" onClick={() => handleSelect(result.id)}>
             <h3 className="text-lg font-semibold text-gray-800">{result.name}</h3>
             <p className="text-sm text-gray-600">{result.description}</p>
             <p className="text-sm text-gray-600">{result.district_name} - {result.category_name}</p>
             {result.image_url && (
-              <img src={result.image_url} alt={result.name} className="w-full h-48 object-cover rounded mt-2" />
+              <Image  width={500}height={300} src={result.image_url} alt={result.name} className="w-full h-48 object-cover rounded mt-2" />
             )}
           </div>
         ))}

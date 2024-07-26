@@ -54,11 +54,11 @@ const EditOperatingHoursPage = () => {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">
-      <div className="w-full max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md">
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 p-4">
+      <div className="max-w-lg w-full bg-white rounded-lg shadow-md overflow-hidden p-8">
         <h2 className="text-2xl font-bold mb-5 text-center">Update Operating Hour</h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mb-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div className="relative z-0 w-full mb-6 group">
             <label htmlFor="place_id" className="block text-sm font-medium text-gray-700">Place</label>
             <input
               id="place_id"
@@ -72,8 +72,8 @@ const EditOperatingHoursPage = () => {
             />
             {errors.place_id && <p className="text-red-500 text-xs mt-1">Place is required.</p>}
           </div>
-          <div className="mb-4">
-            <label htmlFor="day_of_week" className="block text-sm font-medium text-gray-700">Day of Week</label>
+          <div className="relative z-0 w-full mb-6 group">
+            <label htmlFor="day_of_week" className="block text-sm font-medium text-gray-700">Day of the Week</label>
             <select
               id="day_of_week"
               {...register('day_of_week', { required: true })}
@@ -87,9 +87,9 @@ const EditOperatingHoursPage = () => {
               <option value="Friday">Friday</option>
               <option value="Saturday">Saturday</option>
             </select>
-            {errors.day_of_week && <p className="text-red-500 text-xs mt-1">Day of week is required.</p>}
+            {errors.day_of_week && <p className="text-red-500 text-xs mt-1">Day of the week is required.</p>}
           </div>
-          <div className="mb-4">
+          <div className="relative z-0 w-full mb-6 group">
             <label htmlFor="opening_time" className="block text-sm font-medium text-gray-700">Opening Time</label>
             <input
               id="opening_time"
@@ -100,7 +100,7 @@ const EditOperatingHoursPage = () => {
             />
             {errors.opening_time && <p className="text-red-500 text-xs mt-1">Opening time is required.</p>}
           </div>
-          <div className="mb-4">
+          <div className="relative z-0 w-full mb-6 group">
             <label htmlFor="closing_time" className="block text-sm font-medium text-gray-700">Closing Time</label>
             <input
               id="closing_time"
@@ -121,7 +121,7 @@ const EditOperatingHoursPage = () => {
           </div>
         </form>
       </div>
-    </div>
+    </section>
   );
 };
 

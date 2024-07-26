@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { getPlaceImages } from '@/utils/auth/admin/get/api';
 import { deletePlaceImage } from '@/utils/auth/admin/delete/api';
@@ -59,7 +60,7 @@ const ImagesIndexPage = () => {
         <div className="grid grid-cols-3 gap-4">
           {images.map((image) => (
             <div key={image.id} className="bg-gray-200 p-4 rounded-lg">
-              <img src={image.image_url} alt={image.image_path} className="w-full h-48 object-cover rounded-lg" />
+              <Image  width={500}height={300} src={image.image_url} alt={image.image_path} className="w-full h-48 object-cover rounded-lg" />
               <p className="mt-2 text-gray-700">Tourism Entity ID: {image.tourism_entities_id}</p>
               <button
                 onClick={() => router.push(`/dashboard/table/images/edit/${image.id}`)}

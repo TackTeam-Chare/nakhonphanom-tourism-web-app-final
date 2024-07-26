@@ -1,6 +1,17 @@
 import React from 'react';
+import Image from 'next/image';
+import { getFetchTourismDataByCategory } from '@/utils/user/api'; // Ensure this import path is correct
 
-const TourismByCategory = ({ tourismData }) => {
+export async function generateMetadata({ params }) {
+  const { id } = params;
+  const tourismData = await getFetchTourismDataByCategory(id);
+  return { title: `สถานที่ท่องเที่ยวตามหมวดหมู่ ${tourismData[0]?.category_name || 'Unknown'}` };
+}
+
+const Page = async ({ params }) => {
+  const { id } = params;
+  const tourismData = await getFetchTourismDataByCategory(id);
+
   if (!tourismData || tourismData.length === 0) {
     return <p>ไม่พบสถานที่ท่องเที่ยวในหมวดหมู่นี้</p>;
   }
@@ -20,8 +31,9 @@ const TourismByCategory = ({ tourismData }) => {
               <div className="image-gallery">
                 <p><strong>Images:</strong></p>
                 {place.images.split(',').map((image, index) => (
-                  <img
+                  <Image
                     key={index}
+                    width={500}height={300}
                     src={image}
                     alt={place.name}
                     className="w-full h-auto rounded-lg shadow-md mb-2"
@@ -53,4 +65,4 @@ const TourismByCategory = ({ tourismData }) => {
   );
 };
 
-export default TourismByCategory;
+export default Page;

@@ -1,4 +1,5 @@
-"use client";
+'use client';
+
 import { useState, useEffect } from "react";
 import { createTouristEntity } from "@/utils/auth/admin/add/api";
 import { getDistricts, getCategories } from "@/utils/auth/admin/get/api";
@@ -27,6 +28,7 @@ export default function CreateProject() {
         setCategories(categoriesData);
       } catch (error) {
         console.error("Failed to fetch districts and categories", error);
+        setError("Failed to load districts and categories. Please try again.");
       }
     };
 
@@ -59,8 +61,6 @@ export default function CreateProject() {
         }
       }
 
-      console.log('Sending Data:', formData);
-
       const response = await createTouristEntity(data);
 
       if (!response) {
@@ -88,60 +88,188 @@ export default function CreateProject() {
   };
 
   return (
-    <div className="container mx-auto mt-8">
-      <h1 className="text-3xl font-semibold mb-4 text-center">Create Project</h1>
-      <form onSubmit={handleSubmit} className="max-w-xl mx-auto">
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">Project Name</label>
-          <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
-          <textarea id="description" name="description" value={formData.description} onChange={handleChange} rows="3" className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
-        </div>
-        <div className="mb-4">
-          <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location</label>
-          <input type="text" id="location" name="location" value={formData.location} onChange={handleChange} className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-        </div>
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div>
-            <label htmlFor="latitude" className="block text-sm font-medium text-gray-700">Latitude</label>
-            <input type="text" id="latitude" name="latitude" value={formData.latitude} onChange={handleChange} className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 p-4">
+      <div className="max-w-md w-full bg-white rounded-lg shadow-md overflow-hidden p-8">
+        <h2 className="text-2xl font-bold text-center text-gray-800">Create Project</h2>
+        {error && <div className="text-red-500 text-center mb-4">{error}</div>}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="relative z-0 w-full mb-6 group">
+            <input
+              type="text"
+              name="name"
+              id="name"
+              className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
+              placeholder=" "
+              value={formData.name}
+              onChange={handleChange}
+            />
+            <label
+              htmlFor="name"
+              className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6 ${
+                formData.name ? 'scale-75 -translate-y-6' : ''
+              }`}
+            >
+              Project Name
+            </label>
           </div>
-          <div>
-            <label htmlFor="longitude" className="block text-sm font-medium text-gray-700">Longitude</label>
-            <input type="text" id="longitude" name="longitude" value={formData.longitude} onChange={handleChange} className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+          <div className="relative z-0 w-full mb-6 group">
+            <textarea
+              name="description"
+              id="description"
+              className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
+              placeholder=" "
+              value={formData.description}
+              onChange={handleChange}
+              rows="3"
+            />
+            <label
+              htmlFor="description"
+              className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6 ${
+                formData.description ? 'scale-75 -translate-y-6' : ''
+              }`}
+            >
+              Description
+            </label>
           </div>
-        </div>
-        <div className="mb-4">
-          <label htmlFor="district_name" className="block text-sm font-medium text-gray-700">District</label>
-          <select id="district_name" name="district_name" value={formData.district_name} onChange={handleChange} className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-            <option value="">Select District</option>
-            {districts.map((district) => (
-              <option key={district.id} value={district.name}>{district.name}</option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-4">
-          <label htmlFor="category_name" className="block text-sm font-medium text-gray-700">Category</label>
-          <select id="category_name" name="category_name" value={formData.category_name} onChange={handleChange} className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-            <option value="">Select Category</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.name}>{category.name}</option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-4">
-          <label htmlFor="image_paths" className="block text-sm font-medium text-gray-700">Image Paths</label>
-          <input type="file" id="image_paths" name="image_paths" multiple onChange={handleChange} className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-        </div>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        <div className="mt-6">
-          <button type="submit" disabled={submitting} className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}>
-            {submitting ? 'Creating...' : 'Create Project'}
-          </button>
-        </div>
-      </form>
-    </div>
+          <div className="relative z-0 w-full mb-6 group">
+            <input
+              type="text"
+              name="location"
+              id="location"
+              className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
+              placeholder=" "
+              value={formData.location}
+              onChange={handleChange}
+            />
+            <label
+              htmlFor="location"
+              className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6 ${
+                formData.location ? 'scale-75 -translate-y-6' : ''
+              }`}
+            >
+              Location
+            </label>
+          </div>
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="relative z-0 w-full group">
+              <input
+                type="text"
+                name="latitude"
+                id="latitude"
+                className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
+                placeholder=" "
+                value={formData.latitude}
+                onChange={handleChange}
+              />
+              <label
+                htmlFor="latitude"
+                className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6 ${
+                  formData.latitude ? 'scale-75 -translate-y-6' : ''
+                }`}
+              >
+                Latitude
+              </label>
+            </div>
+            <div className="relative z-0 w-full group">
+              <input
+                type="text"
+                name="longitude"
+                id="longitude"
+                className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
+                placeholder=" "
+                value={formData.longitude}
+                onChange={handleChange}
+              />
+              <label
+                htmlFor="longitude"
+                className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6 ${
+                  formData.longitude ? 'scale-75 -translate-y-6' : ''
+                }`}
+              >
+                Longitude
+              </label>
+            </div>
+          </div>
+          <div className="relative z-0 w-full mb-6 group">
+            <select
+              name="district_name"
+              id="district_name"
+              className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
+              value={formData.district_name}
+              onChange={handleChange}
+            >
+              <option value="">Select District</option>
+              {districts.map((district) => (
+                <option key={district.id} value={district.name}>
+                  {district.name}
+                </option>
+              ))}
+            </select>
+            <label
+              htmlFor="district_name"
+              className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6 ${
+                formData.district_name ? 'scale-75 -translate-y-6' : ''
+              }`}
+            >
+              District
+            </label>
+          </div>
+          <div className="relative z-0 w-full mb-6 group">
+            <select
+              name="category_name"
+              id="category_name"
+              className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
+              value={formData.category_name}
+              onChange={handleChange}
+            >
+              <option value="">Select Category</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            <label
+              htmlFor="category_name"
+              className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6 ${
+                formData.category_name ? 'scale-75 -translate-y-6' : ''
+              }`}
+            >
+              Category
+            </label>
+          </div>
+          <div className="relative z-0 w-full mb-6 group">
+            <input
+              type="file"
+              name="image_paths"
+              id="image_paths"
+              className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
+              multiple
+              onChange={handleChange}
+            />
+            <label
+              htmlFor="image_paths"
+              className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6 ${
+                formData.image_paths ? 'scale-75 -translate-y-6' : ''
+              }`}
+            >
+              Image Paths
+            </label>
+          </div>
+          {error && <p className="text-red-500 text-center">{error}</p>}
+          <div>
+            <button
+              type="submit"
+              disabled={submitting}
+              className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 ease-in-out ${
+                submitting ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+            >
+              {submitting ? 'Creating...' : 'Create Project'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
   );
 }
