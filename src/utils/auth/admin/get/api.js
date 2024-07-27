@@ -59,27 +59,27 @@ export const getPlaceImages = async () => {
 
 export const getPlaceById = async (id) => {
     try {
-      const token = getToken();
-      const response = await auth.get(`/admin/place/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
+        const token = getToken();
+        const response = await auth.get(`/admin/place/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        const place = response.data;
+
+        if (place && Array.isArray(place.images)) {
+            place.images = place.images.map(image => ({
+                ...image,
+                image_url: image.image_path ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${image.image_path}` : null,
+            }));
         }
-      });
-      const place = response.data;
 
-      if (place && Array.isArray(place.images)) {
-        place.images = place.images.map(image => ({
-          ...image,
-          image_url: image.image_path ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${image.image_path}` : null,
-        }));
-      }
-
-      return place;
+        return place;
     } catch (error) {
-      console.error('Error fetching tourist entity:', error);
-      throw error;
+        console.error('Error fetching tourist entity:', error);
+        throw error;
     }
-  };
+};
 
 export const getPlaceImagesById = async (id) => {
     try {
@@ -252,79 +252,114 @@ export const getOperatingHoursById = async (id) => {
 
 export const getAllFetchTourismData = async () => {
     try {
-      const token = getToken();
-      const response = await auth.get('/admin/place', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      return response.data;
+        const token = getToken();
+        const response = await auth.get('/admin/place', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        const data = Array.isArray(response.data) ? response.data : [];
+
+        return data.map(place => ({
+            ...place,
+            image_path: place.image_path ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${place.image_path}` : null,
+        }));
     } catch (error) {
-      console.error('Error fetching tourism data:', error);
-      throw error;
+        console.error('Error fetching tourism data:', error);
+        throw error;
     }
-  };
+};
 
 export const getFetchTourismDataById = async (id) => {
     try {
-      const token = getToken();
-      const response = await auth.get(`/admin/place/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      return response.data;
+        const token = getToken();
+        const response = await auth.get(`/admin/place/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
     } catch (error) {
-      console.error('Error fetching tourism data:', error);
-      throw error;
+        console.error('Error fetching tourism data:', error);
+        throw error;
     }
-  };
+};
 
-export const getNearbyFetchTourismData = async (id) => {
+export const getNearbyFetchTourismData = async (id, radius = 5000) => {
     try {
-      const token = getToken();
-      const response = await auth.get(`/admin/place/${id}/nearby`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching tourism data:', error);
-      throw error;
-    }
-  };
-
-  export const getFetchTourismDataByCategory = async (categoryId) => {
-    try {
-      const token = getToken();
-      const response = await auth.get(`/admin/category/${categoryId}/place`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching tourism data:', error);
-      throw error;
-    }
-  };
+        const token = getToken();
+        const response = await auth.get(`/admin/place/nearby/${id}?radius=${radius}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        const { entity, nearbyEntities } = response.data;
   
+        if (entity.images) {
+          entity.images = entity.images.map(img => ({
+            ...img,
+            image_url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${img.image_path}`
+          }));
+        }
+    
+        nearbyEntities.forEach(ent => {
+          if (ent.image_path) {
+            ent.image_path = ent.image_path.map(img => ({
+              ...img,
+              image_url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${img.image_path}`
+            }));
+          }
+        });
+    
+        return { entity, nearbyEntities };
+    } catch (error) {
+        console.error('Error fetching tourism data:', error);
+        throw error;
+    }
+};
+
+export const getFetchTourismDataByCategory = async (categoryId) => {
+    try {
+        const token = getToken();
+        const response = await auth.get(`/admin/category/${categoryId}/place`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching tourism data:', error);
+        throw error;
+    }
+};
+
 
 // Fetch tourism data by district
 export const getFetchTourismDataByDistrict = async (districtId) => {
     try {
-      const token = getToken();
-      const response = await auth.get(`/admin/district/${districtId}/place`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      return response.data;
+        const token = getToken();
+        const response = await auth.get(`/admin/district/${districtId}/place`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
     } catch (error) {
-      console.error('Error fetching tourism data:', error);
-      throw error;
+        console.error('Error fetching tourism data:', error);
+        throw error;
     }
-  };
-  export const getFetchTourismDataBySeason = async (seasonId) => {
+};
+export const getFetchTourismDataBySeason = async (seasonId) => {
     try {
-      const token = getToken();
-      const response = await auth.get(`/admin/season/${seasonId}/place`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      return response.data;
+        const token = getToken();
+        const response = await auth.get(`/admin/season/${seasonId}/place`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
     } catch (error) {
-      console.error('Error fetching tourism data:', error);
-      throw error;
+        console.error('Error fetching tourism data:', error);
+        throw error;
     }
-  };
+};
