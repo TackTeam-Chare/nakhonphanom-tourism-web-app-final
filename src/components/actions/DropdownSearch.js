@@ -56,7 +56,7 @@ const DropdownSearch = () => {
   };
 
   const handleSelect = (id) => {
-    router.push(`/tourism/nearby${id}`); 
+    router.push(`/places/nearby/${id}`); 
   };
 
   return (

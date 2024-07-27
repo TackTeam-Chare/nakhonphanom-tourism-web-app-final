@@ -29,7 +29,7 @@ const SearchBar = () => {
   };
 
   const handleSelect = (id) => {
-    router.push(`/tourism/${id}`);
+    router.push(`/places/nearby/${id}`);
     clearSearch();
   };
 

@@ -81,20 +81,26 @@ export const getPlaceById = async (id) => {
     }
   };
 
-export const getPlaceImagesById = async (id) => {
+  export const getPlaceImagesById = async (id) => {
     try {
-      const token = getToken();
-      const response = await auth.get(`/admin/images/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
+        const token = getToken();
+        const response = await auth.get(`/admin/images/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const image = response.data;
+
+        if (image) {
+            image.image_url = image.image_path ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${image.image_path}` : null;
+        }
+
+        return image;
     } catch (error) {
-      console.error('Error fetching tourist entity:', error);
-      throw error;
+        console.error('Error fetching image by ID:', error);
+        throw error;
     }
-  };
+};
 
 
 export const getSeasons = async () => {

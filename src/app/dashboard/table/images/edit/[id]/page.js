@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { useRouter, useParams } from 'next/navigation';
-import { getPlaceImagesById } from '@/utils/auth/admin/get/api';
+import { getPlaceImagesById, getPlaceById } from '@/utils/auth/admin/get/api';
 import { updateTourismImages } from '@/utils/auth/admin/edit/api';
 
 const EditImagesPage = () => {
@@ -19,12 +19,11 @@ const EditImagesPage = () => {
   useEffect(() => {
     const fetchEntity = async () => {
       try {
-        const { tourism_entities_id, images } = await getPlaceImagesById(id);
-        setValue('tourism_entities_id', tourism_entities_id);
-        setExistingImages(images || []); // Initialize with empty array if images are undefined
-        if (images.length > 0) {
-          setPlaceName(images[0].tourism_entity_name);
-        }
+        const image = await getPlaceImagesById(id);
+        const place = await getPlaceById(image.tourism_entities_id);
+        setValue('tourism_entities_id', `Id:${image.tourism_entities_id} ${place.name}`);
+        setPlaceName(place.name);
+        setExistingImages([image]);  // Wrapping the image object in an array
       } catch (error) {
         console.error('Error fetching entity:', error);
       }
@@ -57,11 +56,11 @@ const EditImagesPage = () => {
   return (
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 p-4">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold mb-4 text-center">Edit Images for {placeName}</h1>
+        <h1 className="text-2xl font-bold mb-4 text-center">Edit tourism_entities_images Id {id}</h1>
         {message && <p className="mb-4 text-green-500 text-center">{message}</p>}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="relative z-0 w-full mb-6 group">
-            <label className="block text-sm font-medium text-gray-700">Tourism Entity ID</label>
+            <label className="block text-sm font-medium text-gray-700">Tourism Entity </label>
             <input
               type="text"
               {...register('tourism_entities_id')}
@@ -78,7 +77,10 @@ const EditImagesPage = () => {
                     key={image.id}
                     src={image.image_url}
                     alt={image.image_path}
+                    width={100}
+                    height={100}
                     className="w-full h-24 object-cover rounded-lg"
+                    priority // Add priority if the image is above the fold
                   />
                 ))
               ) : (
