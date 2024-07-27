@@ -29,13 +29,18 @@ const AddSeasonsRelationForm = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await createSeasonsRelation(data);
-      alert(`Relation created successfully with ID: ${response.id}`);
+        const response = await createSeasonsRelation(data);
+        alert(`Relation created successfully with ID: ${response.id}`);
     } catch (error) {
-      console.error('Error creating relation:', error);
-      alert('Error creating relation');
+        if (error.response && error.response.status === 400) {
+            alert(error.response.data.error);
+        } else {
+            console.error('Error creating relation:', error);
+            alert('Error creating relation');
+        }
     }
-  };
+};
+
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 p-4">

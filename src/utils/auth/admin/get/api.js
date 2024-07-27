@@ -81,7 +81,7 @@ export const getPlaceById = async (id) => {
     }
   };
 
-  export const getPlaceImagesById = async (id) => {
+export const getPlaceImagesById = async (id) => {
     try {
         const token = getToken();
         const response = await auth.get(`/admin/images/${id}`, {
@@ -90,11 +90,9 @@ export const getPlaceById = async (id) => {
             },
         });
         const image = response.data;
-
         if (image) {
             image.image_url = image.image_path ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${image.image_path}` : null;
         }
-
         return image;
     } catch (error) {
         console.error('Error fetching image by ID:', error);

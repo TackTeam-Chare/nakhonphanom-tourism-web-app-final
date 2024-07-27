@@ -97,6 +97,7 @@ export const createSeasonsRelation = async (data) => {
     throw error;
   }
 };
+
 export const createOperatingHours = async (data) => {
   try {
     const token = getToken();
