@@ -2,8 +2,8 @@
 "use client";
 import{ React,  useState, useEffect } from "react";
 import { getPlaces } from "@/utils/auth/admin/get/api";
-import SearchBar from '@/components/actions/SearchBar';
-import DropdownSearch from '@/components/actions/DropdownSearch';
+import SearchBar from '@/components/actions/auth/SearchBar';
+import DropdownSearch from '@/components/actions/auth/DropdownSearch';
 import LogoutButton from '@/components/auth/LogoutButton';
 
 const ManagePlaces = () => {

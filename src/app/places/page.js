@@ -4,7 +4,10 @@ import { getAllFetchTourismData } from '@/utils/user/api'; // Ensure this path i
 import Layout from '@/components/common/layout';
 import Link from 'next/link';
 import Image from 'next/image';
-import Pagination from '@/components/actions/Pagination'; // Verify the path is correct
+import Pagination from '@/components/common/Pagination'; // Verify the path is correct
+import SearchBar from '@/components/actions/SearchBar';
+import DropdownSearch from '@/components/actions/DropdownSearch';
+
 
 const TourismPage = () => {
   const [data, setData] = useState([]);
@@ -39,6 +42,8 @@ const TourismPage = () => {
   return (
     <Layout>
       <div className="container mx-auto p-4">
+      <SearchBar />
+      <DropdownSearch />
         <h1 className="text-3xl font-bold mb-8 text-center">Tourism Data</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {currentPlaces.map((place, index) => (

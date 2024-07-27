@@ -107,6 +107,24 @@ export const searchBySeason = async (seasonId) => {
     }
 };
 
+export const searchByTime = async (day_of_week, opening_time, closing_time) => {
+    try {
+      const token = getToken();
+      const response = await auth.get(`/admin/time/${day_of_week}/${opening_time}/${closing_time}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = Array.isArray(response.data) ? response.data : [];
+
+      return data.map(place => ({
+        ...place,
+        image_url: place.image_url ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${place.image_url}` : null,
+      }));
+    } catch (error) {
+      console.error('Error searching by time:', error);
+      throw error;
+    }
+  };
+
 export const searchPlaces = async (query) => {
     try {
       const token = getToken();
@@ -125,22 +143,4 @@ export const searchPlaces = async (query) => {
       console.error('Error searching places:', error);
       throw error;
     }
-  };
-
-export const searchByTime = async (day_of_week, opening_time, closing_time) => {
-    try {
-      const token = getToken();
-      const response = await auth.get(`/admin/time/${day_of_week}/${opening_time}/${closing_time}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const data = Array.isArray(response.data) ? response.data : [];
-
-      return data.map(place => ({
-        ...place,
-        image_url: place.image_url ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${place.image_url}` : null,
-      }));
-    } catch (error) {
-      console.error('Error searching by time:', error);
-      throw error;
-    }
-  };
+};

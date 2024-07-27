@@ -4,6 +4,115 @@ const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
 });
 
+
+// ไม่ต้องใช้ token ในการส่ง request
+export const fetchCategories = async () => {
+  try {
+    const response = await api.get('/categories');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    throw error;
+  }
+};
+
+export const fetchDistricts = async () => {
+  try {
+    const response = await api.get('/districts');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching districts:', error);
+    throw error;
+  }
+};
+
+export const fetchSeasons = async () => {
+  try {
+    const response = await api.get('/seasons');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching seasons:', error);
+    throw error;
+  }
+};
+
+export const searchByCategory = async (categoryId) => {
+  try {
+    const response = await api.get(`/categories/${categoryId}/place`);
+    const data = Array.isArray(response.data) ? response.data : [];
+
+    return data.map(place => ({
+      ...place,
+      image_url: place.image_url ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${place.image_url}` : null,
+    }));
+  } catch (error) {
+    console.error('Error searching by category:', error);
+    throw error;
+  }
+};
+
+export const searchByDistrict = async (districtId) => {
+  try {
+    const response = await api.get(`/districts/${districtId}/place`);
+    const data = Array.isArray(response.data) ? response.data : [];
+
+    return data.map(place => ({
+      ...place,
+      image_url: place.image_url ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${place.image_url}` : null,
+    }));
+  } catch (error) {
+    console.error('Error searching by district:', error);
+    throw error;
+  }
+};
+
+export const searchBySeason = async (seasonId) => {
+  try {
+    const response = await api.get(`/seasons/${seasonId}/place`);
+    const data = Array.isArray(response.data) ? response.data : [];
+
+    return data.map(place => ({
+      ...place,
+      image_url: place.image_url ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${place.image_url}` : null,
+    }));
+  } catch (error) {
+    console.error('Error searching by season:', error);
+    throw error;
+  }
+};
+
+export const searchByTime = async (day_of_week, opening_time, closing_time) => {
+  try {
+    const response = await api.get(`/time/${day_of_week}/${opening_time}/${closing_time}`);
+    const data = Array.isArray(response.data) ? response.data : [];
+
+    return data.map(place => ({
+      ...place,
+      image_url: place.image_url ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${place.image_url}` : null,
+    }));
+  } catch (error) {
+    console.error('Error searching by time:', error);
+    throw error;
+  }
+};
+
+export const searchPlaces = async (query) => {
+  try {
+    const response = await api.get(`/search?q=${query}`);
+    const data = Array.isArray(response.data) ? response.data : [];
+
+    return data.map(place => ({
+      ...place,
+      image_url: typeof place.image_url === 'string'
+        ? place.image_url.split(',').map(imagePath => `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${imagePath.trim()}`)
+        : []
+    }));
+  } catch (error) {
+    console.error('Error searching places:', error);
+    throw error;
+  }
+};
+
 export const getAllFetchTourismData = async () => {
   try {
     const response = await api.get('/place');

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { searchByCategory, searchByDistrict, searchBySeason, searchByTime, fetchCategories, fetchDistricts, fetchSeasons } from '@/utils/user/api';
+import { searchByCategory, searchByDistrict, searchBySeason, searchByTime, fetchCategories, fetchDistricts, fetchSeasons } from '@/utils/auth/admin/search/api';
 
 const DropdownSearch = () => {
   const router = useRouter();
