@@ -25,8 +25,8 @@ export const getPlaces = async () => {
                 Authorization: `Bearer ${token}`
             }
         });
-        const data = Array.isArray(response.data) ? response.data : [];
 
+        const data = Array.isArray(response.data) ? response.data : [];
         return data.map(place => ({
             ...place,
             image_url: place.image_path ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${place.image_path}` : null,
@@ -99,7 +99,6 @@ export const getPlaceImagesById = async (id) => {
         throw error;
     }
 };
-
 
 export const getSeasons = async () => {
     try {
@@ -277,7 +276,7 @@ export const getFetchTourismDataById = async (id) => {
     }
   };
 
-  export const getNearbyFetchTourismData = async (id) => {
+export const getNearbyFetchTourismData = async (id) => {
     try {
       const token = getToken();
       const response = await auth.get(`/admin/place/${id}/nearby`, {
@@ -289,7 +288,7 @@ export const getFetchTourismDataById = async (id) => {
       throw error;
     }
   };
-  
+
   export const getFetchTourismDataByCategory = async (categoryId) => {
     try {
       const token = getToken();

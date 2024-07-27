@@ -1,7 +1,7 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { getNearbyFetchTourismData } from '@/utils/user/api'; 
+import { getNearbyFetchTourismData } from '@/utils/user/api';
 import Layout from '@/components/common/layout';
 
 const Page = ({ params }) => {
@@ -14,6 +14,7 @@ const Page = ({ params }) => {
       if (id) {
         try {
           const data = await getNearbyFetchTourismData(id);
+          console.log('Tourism Data:', data); // ตรวจสอบค่าที่ได้รับจาก API
           setTourismData(data.entity);
           setNearbyEntities(data.nearbyEntities);
         } catch (error) {
@@ -29,18 +30,26 @@ const Page = ({ params }) => {
     return <Layout><p>Loading...</p></Layout>;
   }
 
-  const renderImage = (imagePath, altText) => {
-    if (!imagePath) return null;
+  const renderImage = (images, altText, priority = false) => {
+    if (!images || images.length === 0) {
+      return (
+        <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+          <span className="text-gray-500">No Image Available</span>
+        </div>
+      );
+    }
 
-    return (
+    return images.map((image, index) => (
       <Image
+        key={index}
         width={500}
         height={300}
-        src={imagePath}
+        src={image.image_url}
         alt={altText}
         className="w-full h-auto rounded-lg shadow-md"
+        priority={priority} // เพิ่ม priority property
       />
-    );
+    ));
   };
 
   return (
@@ -49,12 +58,11 @@ const Page = ({ params }) => {
         <h1 className="text-3xl font-bold mb-4">{tourismData.name}</h1>
         <p className="mb-4">{tourismData.description}</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          {renderImage(tourismData.image_path, tourismData.name)}
+          {renderImage(tourismData.images, tourismData.name, true)} {/* ภาพหลักที่ต้องโหลดก่อน */}
           <div>
             <h2 className="text-xl font-semibold mb-2">รายละเอียด</h2>
             <p><strong>หมวดหมู่:</strong> {tourismData.category_name}</p>
             <p><strong>เขต:</strong> {tourismData.district_name}</p>
-            {/* Add other desired details */}
           </div>
         </div>
 

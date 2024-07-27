@@ -32,11 +32,26 @@ export const getFetchTourismDataById = async (id) => {
   }
 };
 
-
 export const getNearbyFetchTourismData = async (id, radius = 5000) => {
   try {
     const response = await api.get(`/place/nearby/${id}?radius=${radius}`);
     const { entity, nearbyEntities } = response.data;
+
+    if (entity.images) {
+      entity.images = entity.images.map(img => ({
+        ...img,
+        image_url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${img.image_path}`
+      }));
+    }
+
+    nearbyEntities.forEach(ent => {
+      if (ent.image_path) {
+        ent.image_path = ent.image_path.map(img => ({
+          ...img,
+          image_url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${img.image_path}`
+        }));
+      }
+    });
 
     return { entity, nearbyEntities };
   } catch (error) {
@@ -45,7 +60,6 @@ export const getNearbyFetchTourismData = async (id, radius = 5000) => {
   }
 };
 
-// ดึงสถานที่ตามหมวดหมู่
 export const getFetchTourismDataByCategory = async (id) => {
   try {
     const response = await api.get(`/categories/${id}/place`);
