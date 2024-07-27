@@ -115,6 +115,21 @@ export const getSeasons = async () => {
     }
 };
 
+export const fetchRealTimeTouristAttractions = async () => {
+    try {
+      const token = getToken();
+      const response = await auth.get('/admin/seasons/real-time', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+    return response.data;
+    } catch (error) {
+      console.error('Error fetching real-time tourist attractions:', error);
+      throw error;
+    }
+  };
+
 export const getSeasonById = async (id) => {
     try {
         const token = getToken();
