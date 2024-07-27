@@ -3,11 +3,17 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { getNearbyFetchTourismData } from '@/utils/user/api';
 import Layout from '@/components/common/layout';
+import { useRouter } from 'next/navigation';
 
 const Page = ({ params }) => {
   const { id } = params;
+  const router = useRouter();
   const [tourismData, setTourismData] = useState(null);
   const [nearbyEntities, setNearbyEntities] = useState([]);
+  
+  const handleSelect = (id) => {
+    router.push(`/places/nearby/${id}`); 
+  };
 
   useEffect(() => {
     const fetchTourismData = async () => {
@@ -69,7 +75,7 @@ const Page = ({ params }) => {
         <h2 className="text-xl font-semibold mb-4">สถานที่ท่องเที่ยวใกล้เคียง</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {nearbyEntities.map((entity) => (
-            <div key={entity.id} className="bg-white p-4 rounded-lg shadow-lg flex flex-col items-start">
+            <div key={entity.id} onClick={() => handleSelect(entity.id)} className="bg-white p-4 rounded-lg shadow-lg flex flex-col items-start">
               {renderImage(entity.image_path, entity.name)}
               <h3 className="text-lg font-semibold mb-2">{entity.name}</h3>
               <p className="text-gray-700 mb-1"><strong>หมวดหมู่:</strong> {entity.category_name}</p>
