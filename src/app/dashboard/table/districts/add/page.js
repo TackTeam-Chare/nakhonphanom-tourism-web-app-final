@@ -3,6 +3,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { createDistrict } from '@/utils/auth/admin/add/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddDistrictForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -10,10 +12,10 @@ const AddDistrictForm = () => {
   const onSubmit = async (data) => {
     try {
       const response = await createDistrict(data);
-      alert(`District created successfully with ID: ${response.id}`);
+      toast.success(`District created successfully with ID: ${response.id}`);
     } catch (error) {
       console.error('Error creating district:', error);
-      alert('Error creating district');
+      toast.error('Error creating district');
     }
   };
 
@@ -50,6 +52,7 @@ const AddDistrictForm = () => {
             </button>
           </div>
         </form>
+        <ToastContainer />
       </div>
     </section>
   );

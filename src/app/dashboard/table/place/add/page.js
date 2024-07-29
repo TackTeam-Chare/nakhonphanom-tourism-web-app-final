@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { createTouristEntity } from "@/utils/auth/admin/add/api";
 import { getDistricts, getCategories } from "@/utils/auth/admin/get/api";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function CreateProject() {
   const [formData, setFormData] = useState({
@@ -29,6 +31,7 @@ export default function CreateProject() {
       } catch (error) {
         console.error("Failed to fetch districts and categories", error);
         setError("Failed to load districts and categories. Please try again.");
+        toast.error("Failed to load districts and categories. Please try again.");
       }
     };
 
@@ -78,10 +81,11 @@ export default function CreateProject() {
         image_paths: null,
       });
       setError("");
-      alert("Project created successfully!");
+      toast.success("Project created successfully!");
     } catch (error) {
       console.error("Failed to create project", error);
       setError("Failed to create project. Please try again.");
+      toast.error("Failed to create project. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -269,6 +273,7 @@ export default function CreateProject() {
             </button>
           </div>
         </form>
+        <ToastContainer />
       </div>
     </section>
   );

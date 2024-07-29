@@ -3,7 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getCategories } from '@/utils/auth/admin/get/api';
-import {deleteCategory } from '@/utils/auth/admin/delete/api';
+import { deleteCategory } from '@/utils/auth/admin/delete/api';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CategoriesPage = () => {
   const [categories, setCategories] = useState([]);
@@ -18,6 +20,7 @@ const CategoriesPage = () => {
         setCategories(result);
       } catch (err) {
         setError(err.message);
+        toast.error('Error fetching categories');
       }
     };
 
@@ -29,10 +32,10 @@ const CategoriesPage = () => {
       try {
         await deleteCategory(id);
         setCategories(categories.filter(category => category.id !== id));
-        setAlert({ type: 'success', message: 'Category deleted successfully!' });
+        toast.success('Category deleted successfully!');
       } catch (error) {
         console.error(`Error deleting category with ID ${id}:`, error);
-        setAlert({ type: 'error', message: 'Error deleting category. Please try again.' });
+        toast.error('Error deleting category. Please try again.');
       }
     }
   };
@@ -97,6 +100,7 @@ const CategoriesPage = () => {
           </tbody>
         </table>
       </div>
+      <ToastContainer />
     </div>
   );
 };

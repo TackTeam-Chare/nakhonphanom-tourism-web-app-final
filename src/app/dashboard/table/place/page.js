@@ -1,15 +1,16 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { getPlaces } from '@/utils/auth/admin/get/api';
 import { deletePlace } from '@/utils/auth/admin/delete/api';
+import { useTable, useSortBy, usePagination, useGlobalFilter } from 'react-table';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const PlaceIndexPage = () => {
   const [places, setPlaces] = useState([]);
-  const [error, setError] = useState(null);
-  const [alert, setAlert] = useState({ type: '', message: '' });
   const router = useRouter();
 
   useEffect(() => {
@@ -18,82 +19,169 @@ const PlaceIndexPage = () => {
         const result = await getPlaces();
         setPlaces(result);
       } catch (err) {
-        setError(err.message);
+        toast.error('Error fetching places');
       }
     };
 
     fetchPlaces();
-  }, []);
+  }, []); // Empty dependency array to run only once after mount
 
   const handleDelete = async (id) => {
     if (confirm('Are you sure you want to delete this place?')) {
       try {
         await deletePlace(id);
-        setPlaces(places.filter(place => place.id !== id));
-        setAlert({ type: 'success', message: 'Place deleted successfully!' });
+        setPlaces((prevPlaces) => prevPlaces.filter((place) => place.id !== id));
+        toast.success('Place deleted successfully!');
       } catch (error) {
         console.error(`Error deleting place with ID ${id}:`, error);
-        setError('Error deleting place. Please try again.');
-        setAlert({ type: 'error', message: 'Error deleting place. Please try again.' });
+        toast.error('Error deleting place. Please try again.');
       }
     }
   };
 
+  const columns = useMemo(
+    () => [
+      {
+        Header: 'Image',
+        accessor: 'image_url',
+        Cell: ({ cell: { value } }) => (
+          value ? <Image src={value} alt="Place" width={50} height={50} className="object-cover rounded" /> : 'No Image'
+        ),
+      },
+      {
+        Header: 'Name',
+        accessor: 'name',
+      },
+      {
+        Header: 'Description',
+        accessor: 'description',
+      },
+      {
+        Header: 'Location',
+        accessor: 'location',
+      },
+      {
+        Header: 'Latitude',
+        accessor: 'latitude',
+      },
+      {
+        Header: 'Longitude',
+        accessor: 'longitude',
+      },
+      {
+        Header: 'Actions',
+        Cell: ({ row }) => (
+          <div>
+            <button
+              onClick={() => router.push(`/dashboard/table/place/edit/${row.original.id}`)}
+              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300 ease-in-out"
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => handleDelete(row.original.id)}
+              className="ml-4 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300 ease-in-out"
+            >
+              Delete
+            </button>
+          </div>
+        ),
+      },
+    ],
+    [router] // Adding router as dependency
+  );
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPreviousPage,
+    pageOptions,
+    prepareRow,
+    state,
+    setGlobalFilter,
+  } = useTable(
+    {
+      columns,
+      data: places,
+    },
+    useGlobalFilter,
+    useSortBy,
+    usePagination
+  );
+
+  const { globalFilter, pageIndex } = state;
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-8 text-center text-indigo-600">Tourist Places</h1>
-      {alert.message && (
-        <div
-          className={`${
-            alert.type === 'success' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700'
-          } border px-4 py-3 rounded relative mb-4`}
-          role="alert"
-        >
-          <span className="block sm:inline">{alert.message}</span>
-        </div>
-      )}
       <button
         onClick={() => router.push('/dashboard/table/place/add')}
-        className="mb-4 bg-green-600 text-white px-4 py-2 rounded-md"
+        className="mb-4 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300 ease-in-out"
       >
         Add New Place
       </button>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {places.map((place) => (
-          <div key={place.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-            {place.image_url && (
-              <Image
-                width={500}
-                height={300}
-                src={place.image_url}
-                alt={place.name}
-                className="w-full h-48 object-cover"
-                priority={true} // Added priority for LCP image
-              />
-            )}
-            <div className="p-6">
-              <h2 className="text-2xl font-bold mb-2">{place.name}</h2>
-              <p className="text-sm text-gray-500 mb-2">ID: {place.id}</p>
-              <p className="mb-2">Description: {place.description}</p>
-              <p className="mb-2">Location: {place.location}</p>
-              <p className="mb-2">Latitude: {place.latitude}</p>
-              <p className="mb-2">Longitude: {place.longitude}</p>
-              <button
-                onClick={() => router.push(`/dashboard/table/place/edit/${place.id}`)}
-                className="mt-2 bg-indigo-600 text-white px-4 py-2 rounded-md"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDelete(place.id)}
-                className="mt-2 bg-red-600 text-white px-4 py-2 rounded-md ml-2"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
+      <input
+        value={globalFilter || ''}
+        onChange={(e) => setGlobalFilter(e.target.value)}
+        placeholder="Search..."
+        className="mb-4 p-2 border border-gray-300 rounded-md"
+      />
+      <div className="overflow-x-auto">
+        <table {...getTableProps()} className="min-w-full bg-white border border-gray-200">
+          <thead className="bg-gray-100">
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
+                {headerGroup.headers.map((column) => (
+                  <th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    key={column.id}
+                    className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider"
+                  >
+                    {column.render('Header')}
+                    <span>
+                      {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                    </span>
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()} key={row.id} className="hover:bg-gray-100 transition duration-300 ease-in-out">
+                  {row.cells.map((cell) => (
+                    <td {...cell.getCellProps()} key={cell.column.id} className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                      {cell.render('Cell')}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
+      <div className="flex justify-between items-center mt-4">
+        <button onClick={() => previousPage()} disabled={!canPreviousPage} className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400">
+          Previous
+        </button>
+        <span>
+          Page{' '}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>
+        </span>
+        <button onClick={() => nextPage()} disabled={!canNextPage} className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400">
+          Next
+        </button>
+      </div>
+      <ToastContainer />
     </div>
   );
 };

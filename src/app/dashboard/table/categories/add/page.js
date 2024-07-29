@@ -2,18 +2,18 @@
 
 import { useForm } from 'react-hook-form';
 import { createCategory } from '@/utils/auth/admin/add/api';
-import { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function CreateCategory() {
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const [message, setMessage] = useState('');
 
   const onSubmit = async (data) => {
     try {
       const response = await createCategory(data);
-      setMessage(response.message);
+      toast.success(response.message);
     } catch (error) {
-      setMessage('Error creating category');
+      toast.error('Error creating category');
     }
   };
 
@@ -21,7 +21,6 @@ export default function CreateCategory() {
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 p-4">
       <div className="max-w-lg w-full bg-white p-8 rounded-lg shadow-md overflow-hidden">
         <h1 className="text-3xl font-bold mb-6 text-center text-indigo-600">Create Category</h1>
-        {message && <p className="mb-4 text-green-500 text-center">{message}</p>}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="relative z-0 w-full mb-6 group">
             <input
@@ -48,6 +47,7 @@ export default function CreateCategory() {
             Create Category
           </button>
         </form>
+        <ToastContainer />
       </div>
     </section>
   );

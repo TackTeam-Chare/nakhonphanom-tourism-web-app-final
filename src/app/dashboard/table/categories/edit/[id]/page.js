@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form';
 import { useRouter, useParams } from 'next/navigation';
 import { updateCategory } from '@/utils/auth/admin/edit/api';
 import { getCategoryById } from '@/utils/auth/admin/get/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const UpdateCategoryPage = ({ params }) => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
@@ -20,6 +22,7 @@ const UpdateCategoryPage = ({ params }) => {
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching category:', error);
+        toast.error('Error fetching category');
         setIsLoading(false);
       }
     };
@@ -32,11 +35,13 @@ const UpdateCategoryPage = ({ params }) => {
   const onSubmit = async (data) => {
     try {
       await updateCategory(categoryId, data);
-      alert('Category updated successfully');
-      router.push('/dashboard/table/categories');
+      toast.success('Category updated successfully');
+      setTimeout(() => {
+        router.push('/dashboard/table/categories');
+      }, 2000); // Redirect after 2 seconds
     } catch (error) {
       console.error('Error updating category:', error);
-      alert('Error updating category');
+      toast.error('Error updating category');
     }
   };
 
@@ -72,6 +77,7 @@ const UpdateCategoryPage = ({ params }) => {
             Update Category
           </button>
         </form>
+        <ToastContainer />
       </div>
     </section>
   );

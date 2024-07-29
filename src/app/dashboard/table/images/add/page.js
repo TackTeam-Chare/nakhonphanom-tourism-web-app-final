@@ -5,12 +5,13 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { getPlaces } from '@/utils/auth/admin/get/api';
 import { uploadTourismImages } from '@/utils/auth/admin/add/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const UploadImagesPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const router = useRouter();
   const [places, setPlaces] = useState([]);
-  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const fetchPlaces = async () => {
@@ -19,6 +20,7 @@ const UploadImagesPage = () => {
         setPlaces(placesData);
       } catch (error) {
         console.error('Error fetching places:', error);
+        toast.error('Error fetching places');
       }
     };
 
@@ -34,11 +36,13 @@ const UploadImagesPage = () => {
 
     try {
       await uploadTourismImages(formData);
-      setMessage('Images uploaded successfully');
-      router.push('/dashboard/table/images');
+      toast.success('Images uploaded successfully');
+      setTimeout(() => {
+        router.push('/dashboard/table/images');
+      }, 2000); // Redirect after 2 seconds
     } catch (error) {
       console.error('Error uploading images:', error);
-      setMessage('Error uploading images');
+      toast.error('Error uploading images');
     }
   };
 
@@ -46,7 +50,6 @@ const UploadImagesPage = () => {
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 p-4">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-4 text-center">Upload Images</h1>
-        {message && <p className="mb-4 text-green-500 text-center">{message}</p>}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="relative z-0 w-full mb-6 group">
             <label className="block text-sm font-medium text-gray-700">Tourism Entity</label>
@@ -82,6 +85,7 @@ const UploadImagesPage = () => {
             Upload
           </button>
         </form>
+        <ToastContainer />
       </div>
     </section>
   );

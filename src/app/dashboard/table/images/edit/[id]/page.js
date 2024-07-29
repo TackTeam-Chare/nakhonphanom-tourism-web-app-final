@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form';
 import { useRouter, useParams } from 'next/navigation';
 import { getPlaceImagesById, getPlaceById } from '@/utils/auth/admin/get/api';
 import { updateTourismImages } from '@/utils/auth/admin/edit/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditImagesPage = () => {
   const { id } = useParams();
@@ -13,7 +15,6 @@ const EditImagesPage = () => {
   const router = useRouter();
   const [imageFiles, setImageFiles] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
-  const [message, setMessage] = useState('');
   const [placeName, setPlaceName] = useState('');
 
   useEffect(() => {
@@ -26,6 +27,7 @@ const EditImagesPage = () => {
         setExistingImages([image]);  // Wrapping the image object in an array
       } catch (error) {
         console.error('Error fetching entity:', error);
+        toast.error('Error fetching entity details');
       }
     };
 
@@ -41,11 +43,13 @@ const EditImagesPage = () => {
 
     try {
       await updateTourismImages(id, formData);
-      setMessage('Images updated successfully');
-      router.push('/dashboard/table/images');
+      toast.success('Images updated successfully');
+      setTimeout(() => {
+        router.push('/dashboard/table/images');
+      }, 2000); // Redirect after 2 seconds
     } catch (error) {
       console.error('Error updating images:', error);
-      setMessage('Error updating images');
+      toast.error('Error updating images');
     }
   };
 
@@ -57,10 +61,9 @@ const EditImagesPage = () => {
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 p-4">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-4 text-center">Edit tourism_entities_images Id {id}</h1>
-        {message && <p className="mb-4 text-green-500 text-center">{message}</p>}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="relative z-0 w-full mb-6 group">
-            <label className="block text-sm font-medium text-gray-700">Tourism Entity </label>
+            <label className="block text-sm font-medium text-gray-700">Tourism Entity</label>
             <input
               type="text"
               {...register('tourism_entities_id')}
@@ -105,6 +108,7 @@ const EditImagesPage = () => {
             Update Images
           </button>
         </form>
+        <ToastContainer />
       </div>
     </section>
   );

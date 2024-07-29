@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form';
 import { useRouter, useParams } from 'next/navigation';
 import { getSeasonsRelationById, getSeasons, getPlaceById } from '@/utils/auth/admin/get/api';
 import { updateSeasonsRelation } from '@/utils/auth/admin/edit/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditSeasonsRelationPage = () => {
   const { id } = useParams();
@@ -32,6 +34,7 @@ const EditSeasonsRelationPage = () => {
       } catch (error) {
         console.error('Error fetching relation:', error);
         setIsLoading(false);
+        toast.error('Error fetching relation');
       }
     };
 
@@ -43,11 +46,13 @@ const EditSeasonsRelationPage = () => {
   const onSubmit = async (data) => {
     try {
       await updateSeasonsRelation(id, data);
-      alert('Relation updated successfully');
-      router.push('/dashboard/table/seasons-relation');
+      toast.success('Relation updated successfully');
+      setTimeout(() => {
+        router.push('/dashboard/table/seasons-relation');
+      }, 2000); // Redirect after 2 seconds
     } catch (error) {
       console.error('Error updating relation:', error);
-      alert('Error updating relation');
+      toast.error('Error updating relation');
     }
   };
 
@@ -92,6 +97,7 @@ const EditSeasonsRelationPage = () => {
           </button>
         </form>
       </div>
+      <ToastContainer />
     </section>
   );
 };

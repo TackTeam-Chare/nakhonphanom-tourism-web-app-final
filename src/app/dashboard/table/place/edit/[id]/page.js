@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { useRouter, useParams } from 'next/navigation';
 import { getPlaceById, getDistricts, getCategories } from "@/utils/auth/admin/get/api";
 import { updateTouristEntity } from "@/utils/auth/admin/edit/api";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function EditPlace() {
   const { id } = useParams();
@@ -48,6 +50,7 @@ export default function EditPlace() {
         setExistingImages(placeData.images || []);
       } catch (error) {
         console.error("Failed to fetch data", error);
+        toast.error("Failed to fetch data. Please try again.");
       }
     };
 
@@ -84,11 +87,13 @@ export default function EditPlace() {
       }
 
       setError("");
-      alert("Place updated successfully!");
-      router.push('/dashboard/table/place');
+      toast.success("Place updated successfully!");
+      setTimeout(() => {
+        router.push('/dashboard/table/place');
+      }, 2000); // Redirect after 2 seconds
     } catch (error) {
       console.error("Failed to update place", error);
-      setError("Failed to update place. Please try again.");
+      toast.error("Failed to update place. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -298,6 +303,7 @@ export default function EditPlace() {
             {submitting ? 'Updating...' : 'Update Place'}
           </button>
         </form>
+        <ToastContainer />
       </div>
     </section>
   );

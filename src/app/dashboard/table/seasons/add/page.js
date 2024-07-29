@@ -3,6 +3,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { createSeason } from '@/utils/auth/admin/add/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddSeasonForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -10,10 +12,10 @@ const AddSeasonForm = () => {
   const onSubmit = async (data) => {
     try {
       const response = await createSeason(data);
-      alert(`Season created successfully with ID: ${response.id}`);
+      toast.success(`Season created successfully with ID: ${response.id}`);
     } catch (error) {
       console.error('Error creating season:', error);
-      alert('Error creating season');
+      toast.error('Error creating season');
     }
   };
 
@@ -88,6 +90,7 @@ const AddSeasonForm = () => {
             </button>
           </div>
         </form>
+        <ToastContainer />
       </div>
     </section>
   );

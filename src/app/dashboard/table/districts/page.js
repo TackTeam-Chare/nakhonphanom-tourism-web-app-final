@@ -4,11 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getDistricts } from '@/utils/auth/admin/get/api';
 import { deleteDistrict } from '@/utils/auth/admin/delete/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const DistrictsPage = () => {
   const [districts, setDistricts] = useState([]);
   const [error, setError] = useState(null);
-  const [alert, setAlert] = useState({ type: '', message: '' });
   const router = useRouter();
 
   useEffect(() => {
@@ -29,10 +30,10 @@ const DistrictsPage = () => {
       try {
         await deleteDistrict(id);
         setDistricts(districts.filter(district => district.id !== id));
-        setAlert({ type: 'success', message: 'District deleted successfully!' });
+        toast.success('District deleted successfully!');
       } catch (error) {
         console.error(`Error deleting district with ID ${id}:`, error);
-        setAlert({ type: 'error', message: 'Error deleting district. Please try again.' });
+        toast.error('Error deleting district. Please try again.');
       }
     }
   };
@@ -41,25 +42,15 @@ const DistrictsPage = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-8 text-center">Districts</h1>
-      {alert.message && (
-        <div
-          className={`${
-            alert.type === 'success' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700'
-          } border px-4 py-3 rounded relative mb-4`}
-          role="alert"
-        >
-          <span className="block sm:inline">{alert.message}</span>
-        </div>
-      )}
+      <h1 className="text-3xl font-bold mb-8 text-center text-indigo-600">Districts</h1>
       <button
         onClick={() => router.push('/dashboard/table/districts/add')}
-        className="mb-4 bg-green-600 text-white px-4 py-2 rounded-md"
+        className="mb-4 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300 ease-in-out"
       >
         Add New District
       </button>
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200">
+        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
           <thead className="bg-gray-100">
             <tr>
               <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">
@@ -97,6 +88,7 @@ const DistrictsPage = () => {
           </tbody>
         </table>
       </div>
+      <ToastContainer />
     </div>
   );
 };

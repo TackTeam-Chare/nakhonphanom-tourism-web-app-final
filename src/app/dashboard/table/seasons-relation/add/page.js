@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createSeasonsRelation } from '@/utils/auth/admin/add/api';
 import { getSeasons, getPlaces } from '@/utils/auth/admin/get/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddSeasonsRelationForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -21,6 +23,7 @@ const AddSeasonsRelationForm = () => {
         setTouristEntities(touristEntitiesData);
       } catch (error) {
         console.error('Error fetching data:', error);
+        toast.error('Error fetching data');
       }
     };
 
@@ -29,18 +32,17 @@ const AddSeasonsRelationForm = () => {
 
   const onSubmit = async (data) => {
     try {
-        const response = await createSeasonsRelation(data);
-        alert(`Relation created successfully with ID: ${response.id}`);
+      const response = await createSeasonsRelation(data);
+      toast.success(`Relation created successfully with ID: ${response.id}`);
     } catch (error) {
-        if (error.response && error.response.status === 400) {
-            alert(error.response.data.error);
-        } else {
-            console.error('Error creating relation:', error);
-            alert('Error creating relation');
-        }
+      if (error.response && error.response.status === 400) {
+        toast.error(error.response.data.error);
+      } else {
+        console.error('Error creating relation:', error);
+        toast.error('Error creating relation');
+      }
     }
-};
-
+  };
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 p-4">
@@ -87,6 +89,7 @@ const AddSeasonsRelationForm = () => {
           </button>
         </form>
       </div>
+      <ToastContainer />
     </section>
   );
 };

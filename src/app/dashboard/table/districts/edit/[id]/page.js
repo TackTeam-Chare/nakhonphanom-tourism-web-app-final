@@ -5,6 +5,8 @@ import { useRouter, useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { getDistrictById } from '@/utils/auth/admin/get/api';
 import { updateDistrict } from '@/utils/auth/admin/edit/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditDistrictPage = () => {
   const { id } = useParams();
@@ -31,10 +33,12 @@ const EditDistrictPage = () => {
   const onSubmit = async (data) => {
     try {
       await updateDistrict(id, data);
-      alert('District updated successfully');
-      router.push('/dashboard/table/districts');
+      toast.success('District updated successfully');
+      setTimeout(() => {
+        router.push('/dashboard/table/districts');
+      }, 2000); // Redirect after 2 seconds
     } catch (error) {
-      setError('Error updating district');
+      toast.error('Error updating district');
     }
   };
 
@@ -74,6 +78,7 @@ const EditDistrictPage = () => {
             </button>
           </div>
         </form>
+        <ToastContainer />
       </div>
     </section>
   );

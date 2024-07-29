@@ -5,6 +5,8 @@ import { useRouter, useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { getSeasonById } from '@/utils/auth/admin/get/api';
 import { updateSeason } from '@/utils/auth/admin/edit/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditSeasonPage = () => {
   const { id } = useParams();
@@ -33,10 +35,13 @@ const EditSeasonPage = () => {
   const onSubmit = async (data) => {
     try {
       await updateSeason(id, data);
-      alert('Season updated successfully');
-      router.push('/dashboard/table/seasons');
+      toast.success('Season updated successfully');
+      setTimeout(() => {
+        router.push('/dashboard/table/seasons');
+      }, 2000); // Redirect after 2 seconds
     } catch (error) {
       setError('Error updating season');
+      toast.error('Error updating season');
     }
   };
 
@@ -114,6 +119,7 @@ const EditSeasonPage = () => {
             </button>
           </div>
         </form>
+        <ToastContainer />
       </div>
     </section>
   );

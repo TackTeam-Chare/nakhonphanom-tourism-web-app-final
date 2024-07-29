@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createOperatingHours } from '@/utils/auth/admin/add/api';
 import { getPlaces } from '@/utils/auth/admin/get/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddOperatingHoursForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -16,6 +18,7 @@ const AddOperatingHoursForm = () => {
         setPlaces(placesData);
       } catch (error) {
         console.error('Error fetching places:', error);
+        toast.error('Error fetching places');
       }
     };
 
@@ -25,17 +28,17 @@ const AddOperatingHoursForm = () => {
   const onSubmit = async (data) => {
     try {
       const response = await createOperatingHours(data);
-      alert(`Operating hours created successfully with ID: ${response.id}`);
+      toast.success(`Operating hours created successfully with ID: ${response.id}`);
     } catch (error) {
       console.error('Error creating operating hours:', error);
-      alert('Error creating operating hours');
+      toast.error('Error creating operating hours');
     }
   };
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 p-4">
       <div className="max-w-lg w-full bg-white rounded-lg shadow-md overflow-hidden p-8">
-        <h2 className="text-2xl font-bold mb-5 text-center">Add Operating Hours</h2>
+        <h2 className="text-2xl font-bold mb-5 text-center text-indigo-600">Add Operating Hours</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="relative z-0 w-full mb-6 group">
             <label htmlFor="place_id" className="block text-sm font-medium text-gray-700">Place</label>
@@ -105,6 +108,7 @@ const AddOperatingHoursForm = () => {
           </div>
         </form>
       </div>
+      <ToastContainer />
     </section>
   );
 };

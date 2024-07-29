@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form';
 import { useRouter, useParams } from 'next/navigation';
 import { getOperatingHoursById, getPlaces } from '@/utils/auth/admin/get/api';
 import { updateOperatingHours } from '@/utils/auth/admin/edit/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditOperatingHoursPage = () => {
   const { id } = useParams();
@@ -30,6 +32,7 @@ const EditOperatingHoursPage = () => {
         }
       } catch (error) {
         console.error('Error fetching operating hour:', error);
+        toast.error('Error fetching operating hour');
       } finally {
         setIsLoading(false);
       }
@@ -43,11 +46,13 @@ const EditOperatingHoursPage = () => {
   const onSubmit = async (data) => {
     try {
       await updateOperatingHours(id, data);
-      alert('Operating hour updated successfully');
-      router.push('/dashboard/table/time');
+      toast.success('Operating hour updated successfully');
+      setTimeout(() => {
+        router.push('/dashboard/table/time');
+      }, 2000); // Redirect after 2 seconds
     } catch (error) {
       console.error('Error updating operating hour:', error);
-      alert('Error updating operating hour');
+      toast.error('Error updating operating hour');
     }
   };
 
@@ -121,6 +126,7 @@ const EditOperatingHoursPage = () => {
           </div>
         </form>
       </div>
+      <ToastContainer />
     </section>
   );
 };
