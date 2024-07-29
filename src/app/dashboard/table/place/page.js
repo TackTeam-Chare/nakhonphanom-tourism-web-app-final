@@ -24,19 +24,39 @@ const PlaceIndexPage = () => {
     };
 
     fetchPlaces();
-  }, []); // Empty dependency array to run only once after mount
+  }, []);
 
   const handleDelete = async (id) => {
-    if (confirm('Are you sure you want to delete this place?')) {
-      try {
-        await deletePlace(id);
-        setPlaces((prevPlaces) => prevPlaces.filter((place) => place.id !== id));
-        toast.success('Place deleted successfully!');
-      } catch (error) {
-        console.error(`Error deleting place with ID ${id}:`, error);
-        toast.error('Error deleting place. Please try again.');
-      }
-    }
+    toast(
+      ({ closeToast }) => (
+        <div>
+          <p>Are you sure you want to delete this place?</p>
+          <button
+            onClick={async () => {
+              try {
+                await deletePlace(id);
+                setPlaces((prevPlaces) => prevPlaces.filter((place) => place.id !== id));
+                toast.success('Place deleted successfully!');
+                closeToast();
+              } catch (error) {
+                console.error(`Error deleting place with ID ${id}:`, error);
+                toast.error('Error deleting place. Please try again.');
+              }
+            }}
+            className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300 ease-in-out"
+          >
+            Yes
+          </button>
+          <button
+            onClick={closeToast}
+            className="bg-gray-600 text-white px-4 py-2 rounded-md ml-2 hover:bg-gray-700 transition duration-300 ease-in-out"
+          >
+            No
+          </button>
+        </div>
+      ),
+      { closeButton: false }
+    );
   };
 
   const columns = useMemo(
@@ -71,7 +91,7 @@ const PlaceIndexPage = () => {
       {
         Header: 'Actions',
         Cell: ({ row }) => (
-          <div>
+          <div className="flex space-x-2">
             <button
               onClick={() => router.push(`/dashboard/table/place/edit/${row.original.id}`)}
               className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300 ease-in-out"
@@ -80,7 +100,7 @@ const PlaceIndexPage = () => {
             </button>
             <button
               onClick={() => handleDelete(row.original.id)}
-              className="ml-4 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300 ease-in-out"
+              className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300 ease-in-out"
             >
               Delete
             </button>
@@ -88,7 +108,7 @@ const PlaceIndexPage = () => {
         ),
       },
     ],
-    [router] // Adding router as dependency
+    [router]
   );
 
   const {
@@ -119,18 +139,20 @@ const PlaceIndexPage = () => {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-8 text-center text-indigo-600">Tourist Places</h1>
-      <button
-        onClick={() => router.push('/dashboard/table/place/add')}
-        className="mb-4 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300 ease-in-out"
-      >
-        Add New Place
-      </button>
-      <input
-        value={globalFilter || ''}
-        onChange={(e) => setGlobalFilter(e.target.value)}
-        placeholder="Search..."
-        className="mb-4 p-2 border border-gray-300 rounded-md"
-      />
+      <div className="flex justify-between items-center mb-4">
+        <button
+          onClick={() => router.push('/dashboard/table/place/add')}
+          className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300 ease-in-out"
+        >
+          Add New Place
+        </button>
+        <input
+          value={globalFilter || ''}
+          onChange={(e) => setGlobalFilter(e.target.value)}
+          placeholder="Search..."
+          className="p-2 border border-gray-300 rounded-md"
+        />
+      </div>
       <div className="overflow-x-auto">
         <table {...getTableProps()} className="min-w-full bg-white border border-gray-200">
           <thead className="bg-gray-100">
