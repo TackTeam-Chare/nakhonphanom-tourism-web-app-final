@@ -36,6 +36,16 @@ export const fetchSeasons = async () => {
   }
 };
 
+export const fetchRealTimeTouristAttractions = async () => {
+  try {
+    const response = await api.get('/seasons/real-time');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching real-time tourist attractions:', error);
+    throw error;
+  }
+};
+
 export const searchByCategory = async (categoryId) => {
   try {
     const response = await api.get(`/categories/${categoryId}/place`);
