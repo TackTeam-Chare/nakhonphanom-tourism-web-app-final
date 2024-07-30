@@ -21,18 +21,18 @@ const TableIndexPage = () => {
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white rounded-lg shadow-lg">
             <thead>
-              <tr className="w-full bg-indigo-600 text-white">
+              <tr className="bg-indigo-600 text-white">
                 <th className="text-left py-3 px-4 uppercase font-semibold text-sm">Table Name</th>
                 <th className="text-left py-3 px-4 uppercase font-semibold text-sm">Action</th>
               </tr>
             </thead>
             <tbody>
               {tables.map((table, index) => (
-                <tr key={index} className="hover:bg-gray-100">
+                <tr key={index} className="hover:bg-gray-100 transition duration-300 ease-in-out">
                   <td className="text-left py-3 px-4">{table.name}</td>
                   <td className="text-left py-3 px-4">
                     <Link className="text-indigo-600 hover:text-indigo-900 transition-colors duration-300" href={table.path}>
-                      View
+                    View
                     </Link>
                   </td>
                 </tr>

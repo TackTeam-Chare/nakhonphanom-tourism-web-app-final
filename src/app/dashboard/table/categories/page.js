@@ -1,16 +1,15 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { getCategories } from '@/utils/auth/admin/get/api';
 import { deleteCategory } from '@/utils/auth/admin/delete/api';
-import { toast, ToastContainer } from 'react-toastify';
+import { useTable, useSortBy, usePagination, useGlobalFilter } from 'react-table';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const CategoriesPage = () => {
   const [categories, setCategories] = useState([]);
-  const [error, setError] = useState(null);
-  const [alert, setAlert] = useState({ type: '', message: '' });
   const router = useRouter();
 
   useEffect(() => {
@@ -19,7 +18,6 @@ const CategoriesPage = () => {
         const result = await getCategories();
         setCategories(result);
       } catch (err) {
-        setError(err.message);
         toast.error('Error fetching categories');
       }
     };
@@ -28,77 +26,162 @@ const CategoriesPage = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    if (confirm('Are you sure you want to delete this category?')) {
-      try {
-        await deleteCategory(id);
-        setCategories(categories.filter(category => category.id !== id));
-        toast.success('Category deleted successfully!');
-      } catch (error) {
-        console.error(`Error deleting category with ID ${id}:`, error);
-        toast.error('Error deleting category. Please try again.');
-      }
-    }
+    toast(
+      ({ closeToast }) => (
+        <div>
+          <p>Are you sure you want to delete this category?</p>
+          <button
+            onClick={async () => {
+              try {
+                await deleteCategory(id);
+                setCategories((prevCategories) => prevCategories.filter((category) => category.id !== id));
+                toast.success('Category deleted successfully!');
+                closeToast();
+              } catch (error) {
+                console.error(`Error deleting category with ID ${id}:`, error);
+                toast.error('Error deleting category. Please try again.');
+              }
+            }}
+            className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300 ease-in-out"
+          >
+            Yes
+          </button>
+          <button
+            onClick={closeToast}
+            className="bg-gray-600 text-white px-4 py-2 rounded-md ml-2 hover:bg-gray-700 transition duration-300 ease-in-out"
+          >
+            No
+          </button>
+        </div>
+      ),
+      { closeButton: false }
+    );
   };
 
-  if (error) return <div className="text-red-500">Error: {error}</div>;
+  const columns = useMemo(
+    () => [
+      {
+        Header: 'ID',
+        accessor: 'id',
+      },
+      {
+        Header: 'Name',
+        accessor: 'name',
+      },
+      {
+        Header: 'Actions',
+        Cell: ({ row }) => (
+          <div className="flex space-x-2">
+            <button
+              onClick={() => router.push(`/dashboard/table/categories/edit/${row.original.id}`)}
+              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300 ease-in-out"
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => handleDelete(row.original.id)}
+              className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300 ease-in-out"
+            >
+              Delete
+            </button>
+          </div>
+        ),
+      },
+    ],
+    [router]
+  );
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPreviousPage,
+    pageOptions,
+    prepareRow,
+    state,
+    setGlobalFilter,
+  } = useTable(
+    {
+      columns,
+      data: categories,
+    },
+    useGlobalFilter,
+    useSortBy,
+    usePagination
+  );
+
+  const { globalFilter, pageIndex } = state;
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-8 text-center">Categories</h1>
-      {alert.message && (
-        <div
-          className={`${
-            alert.type === 'success' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700'
-          } border px-4 py-3 rounded relative mb-4`}
-          role="alert"
+      <h1 className="text-3xl font-bold mb-8 text-center text-indigo-600">Categories</h1>
+      <div className="flex justify-between items-center mb-4">
+        <button
+          onClick={() => router.push('/dashboard/table/categories/add')}
+          className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300 ease-in-out"
         >
-          <span className="block sm:inline">{alert.message}</span>
-        </div>
-      )}
-      <button
-        onClick={() => router.push('/dashboard/table/categories/add')}
-        className="mb-4 bg-green-600 text-white px-4 py-2 rounded-md"
-      >
-        Add New Categories
-      </button>
+          Add New Categories
+        </button>
+        <input
+          value={globalFilter || ''}
+          onChange={(e) => setGlobalFilter(e.target.value)}
+          placeholder="Search..."
+          className="p-2 border border-gray-300 rounded-md"
+        />
+      </div>
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200">
+        <table {...getTableProps()} className="min-w-full bg-white border border-gray-200">
           <thead className="bg-gray-100">
-            <tr>
-              <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">
-                ID
-              </th>
-              <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">
-                Name
-              </th>
-              <th className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {categories.map((category) => (
-              <tr key={category.id} className="hover:bg-gray-100 transition duration-300 ease-in-out">
-                <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{category.id}</td>
-                <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{category.name}</td>
-                <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                  <button
-                    onClick={() => router.push(`/dashboard/table/categories/edit/${category.id}`)}
-                    className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300 ease-in-out"
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
+                {headerGroup.headers.map((column) => (
+                  <th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    key={column.id}
+                    className="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider"
                   >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(category.id)}
-                    className="ml-4 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300 ease-in-out"
-                  >
-                    Delete
-                  </button>
-                </td>
+                    {column.render('Header')}
+                    <span>
+                      {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                    </span>
+                  </th>
+                ))}
               </tr>
             ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()} key={row.id} className="hover:bg-gray-100 transition duration-300 ease-in-out">
+                  {row.cells.map((cell) => (
+                    <td {...cell.getCellProps()} key={cell.column.id} className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                      {cell.render('Cell')}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
+      </div>
+      <div className="flex justify-between items-center mt-4">
+        <button onClick={() => previousPage()} disabled={!canPreviousPage} className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400">
+          Previous
+        </button>
+        <span>
+          Page{' '}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>
+        </span>
+        <button onClick={() => nextPage()} disabled={!canNextPage} className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400">
+          Next
+        </button>
       </div>
       <ToastContainer />
     </div>
