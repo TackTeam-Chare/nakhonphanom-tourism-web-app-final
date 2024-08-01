@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createTouristEntity } from "@/utils/auth/admin/add/api";
-import { getDistricts, getCategories } from "@/utils/auth/admin/get/api";
+import { getDistricts, getCategories, getSeasons } from "@/utils/auth/admin/get/api";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -15,27 +15,36 @@ export default function CreateProject() {
     longitude: "",
     district_name: "",
     category_name: "",
+    season_id: "",
+    operating_hours: [],
     image_paths: null,
   });
   const [districts, setDistricts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [seasons, setSeasons] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [operatingHour, setOperatingHour] = useState({
+    day_of_week: "",
+    opening_time: "",
+    closing_time: ""
+  });
 
   useEffect(() => {
-    const fetchDistrictsAndCategories = async () => {
+    const fetchData = async () => {
       try {
-        const [districtsData, categoriesData] = await Promise.all([getDistricts(), getCategories()]);
+        const [districtsData, categoriesData, seasonsData] = await Promise.all([getDistricts(), getCategories(), getSeasons()]);
         setDistricts(districtsData);
         setCategories(categoriesData);
+        setSeasons(seasonsData);
       } catch (error) {
-        console.error("Failed to fetch districts and categories", error);
-        setError("Failed to load districts and categories. Please try again.");
-        toast.error("Failed to load districts and categories. Please try again.");
+        console.error("Failed to fetch data", error);
+        setError("Failed to load data. Please try again.");
+        toast.error("Failed to load data. Please try again.");
       }
     };
 
-    fetchDistrictsAndCategories();
+    fetchData();
   }, []);
 
   const handleChange = (e) => {
@@ -44,6 +53,22 @@ export default function CreateProject() {
       ...prevState,
       [name]: name === "image_paths" ? files : value,
     }));
+  };
+
+  const handleOperatingHourChange = (e) => {
+    const { name, value } = e.target;
+    setOperatingHour((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const addOperatingHour = () => {
+    setFormData((prevState) => ({
+      ...prevState,
+      operating_hours: [...prevState.operating_hours, operatingHour]
+    }));
+    setOperatingHour({ day_of_week: "", opening_time: "", closing_time: "" });
   };
 
   const handleSubmit = async (e) => {
@@ -59,6 +84,8 @@ export default function CreateProject() {
               data.append(key, formData[key][i]);
             }
           }
+        } else if (key === "operating_hours") {
+          data.append(key, JSON.stringify(formData[key]));
         } else {
           data.append(key, formData[key]);
         }
@@ -78,6 +105,8 @@ export default function CreateProject() {
         longitude: "",
         district_name: "",
         category_name: "",
+        season_id: "",
+        operating_hours: [],
         image_paths: null,
       });
       setError("");
@@ -241,6 +270,85 @@ export default function CreateProject() {
             >
               Category
             </label>
+          </div>
+          <div className="relative z-0 w-full mb-6 group">
+            <select
+              name="season_id"
+              id="season_id"
+              className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
+              value={formData.season_id}
+              onChange={handleChange}
+            >
+              <option value="">Select Season</option>
+              {seasons.map((season) => (
+                <option key={season.id} value={season.id}>
+                  {season.name}
+                </option>
+              ))}
+            </select>
+            <label
+              htmlFor="season_id"
+              className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6 ${
+                formData.season_id ? 'scale-75 -translate-y-6' : ''
+              }`}
+            >
+              Season
+            </label>
+          </div>
+          <div className="relative z-0 w-full mb-6 group">
+            <label
+              htmlFor="operating_hours"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Operating Hours
+            </label>
+            <div className="grid grid-cols-3 gap-4 mb-4">
+              <select
+                name="day_of_week"
+                value={operatingHour.day_of_week}
+                onChange={handleOperatingHourChange}
+                className="block py-2 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
+              >
+                <option value="">Day of Week</option>
+                <option value="Sunday">Sunday</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+              </select>
+              <input
+                type="time"
+                name="opening_time"
+                value={operatingHour.opening_time}
+                onChange={handleOperatingHourChange}
+                className="block py-2 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
+              />
+              <input
+                type="time"
+                name="closing_time"
+                value={operatingHour.closing_time}
+                onChange={handleOperatingHourChange}
+                className="block py-2 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
+              />
+              <button
+                type="button"
+                onClick={addOperatingHour}
+                className="col-span-3 py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Add Operating Hour
+              </button>
+            </div>
+            <div className="space-y-2">
+              {formData.operating_hours.map((hour, index) => (
+                <div key={index} className="flex items-center justify-between">
+                  <div>
+                    {hour.day_of_week}: {hour.opening_time} - {hour.closing_time}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
           <div className="relative z-0 w-full mb-6 group">
             <input

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useEffect, useState } from 'react';
 import { getAllFetchTourismData } from '@/utils/user/api'; // Ensure this path is correct
 import Layout from '@/components/common/layout';
@@ -8,18 +8,20 @@ import Pagination from '@/components/common/Pagination'; // Verify the path is c
 import SearchBar from '@/components/actions/SearchBar';
 import DropdownSearch from '@/components/actions/DropdownSearch';
 
-
 const TourismPage = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [placesPerPage] = useState(6); // Adjust as per your design
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await getAllFetchTourismData();
         setData(result);
+        setFilteredData(result);
       } catch (err) {
         setError(err.message);
       }
@@ -28,12 +30,25 @@ const TourismPage = () => {
     fetchData();
   }, []);
 
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    if (query) {
+      const filtered = data.filter((place) =>
+        place.name.toLowerCase().includes(query.toLowerCase()) ||
+        place.description.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredData(filtered);
+    } else {
+      setFilteredData(data);
+    }
+  };
+
   if (error) return <div className="text-red-500">Error: {error}</div>;
 
   const indexOfLastPlace = currentPage * placesPerPage;
   const indexOfFirstPlace = indexOfLastPlace - placesPerPage;
-  const currentPlaces = data.slice(indexOfFirstPlace, indexOfLastPlace);
-  const totalPages = Math.ceil(data.length / placesPerPage);
+  const currentPlaces = filteredData.slice(indexOfFirstPlace, indexOfLastPlace);
+  const totalPages = Math.ceil(filteredData.length / placesPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -42,9 +57,9 @@ const TourismPage = () => {
   return (
     <Layout>
       <div className="container mx-auto p-4">
-      <SearchBar />
-      <DropdownSearch />
-        <h1 className="text-3xl font-bold mb-8 text-center">Tourism Data</h1>
+        <SearchBar onSearch={handleSearch} />
+        <DropdownSearch />
+        <h1 className="text-3xl font-bold mb-8 mt-8 text-center ">สถานที่</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {currentPlaces.map((place, index) => (
             <Link className="hover:no-underline" href={`/places/nearby/${place.id}`} key={index}>
