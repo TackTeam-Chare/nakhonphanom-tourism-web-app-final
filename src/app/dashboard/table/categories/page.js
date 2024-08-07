@@ -117,7 +117,8 @@ const CategoriesPage = () => {
   const { globalFilter, pageIndex } = state;
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="min-h-screen bg-gray-100 p-4">
+      <div className="container mx-auto bg-white p-8 rounded-lg shadow-md">
       <h1 className="text-3xl font-bold mb-8 text-center text-indigo-600">Categories</h1>
       <div className="flex justify-between items-center mb-4">
         <button
@@ -184,6 +185,7 @@ const CategoriesPage = () => {
         </button>
       </div>
       <ToastContainer />
+    </div>
     </div>
   );
 };

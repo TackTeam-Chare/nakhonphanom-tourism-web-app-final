@@ -60,14 +60,14 @@ const SearchBar = () => {
         </button>
       )}
       {results.length > 0 && results[0] !== 'no-results' ? (
-        <div className="absolute mt-1 bg-white border border-gray-300 rounded-md shadow-lg w-full z-10 max-h-60 overflow-auto">
+        <div className="absolute mt-1 bg-white border border-gray-300 rounded-md shadow-lg w-full z-50 max-h-60 overflow-auto">
           {results.map((result) => (
             <div
               key={result.id}
               className="flex items-start p-4 cursor-pointer hover:bg-gray-100 transition-colors duration-150 ease-in-out"
               onClick={() => handleSelect(result.id)}
             >
-              <Image  width={500}height={300} src={result.image_url[0]} alt={result.name} className="w-16 h-16 object-cover rounded mr-4" />
+              <Image width={500} height={300} src={result.image_url[0]} alt={result.name} className="w-16 h-16 object-cover rounded mr-4" />
               <div>
                 <p className="text-lg font-semibold">{result.name}</p>
                 <p className="text-sm text-gray-500">{result.category_name} - {result.district_name}</p>
@@ -76,7 +76,7 @@ const SearchBar = () => {
           ))}
         </div>
       ) : results[0] === 'no-results' && (
-        <div className="absolute mt-1 bg-white border border-gray-300 rounded-md shadow-lg w-full z-10 p-4 text-gray-500">
+        <div className="absolute mt-1 bg-white border border-gray-300 rounded-md shadow-lg w-full z-50 p-4 text-gray-500">
           No results found.
         </div>
       )}

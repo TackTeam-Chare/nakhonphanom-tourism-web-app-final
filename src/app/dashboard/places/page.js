@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { getAllFetchTourismData } from '@/utils/auth/admin/get/api'; // Ensure this path is correct
-import Layout from '@/components/common/layout';
 import Link from 'next/link';
 import Image from 'next/image';
 import Pagination from '@/components/common/Pagination';
@@ -40,9 +39,10 @@ const TourismPage = () => {
   };
 
   return (
-    <Layout>
-      <div className="container mx-auto p-4">
-      <SearchBar />
+    <>
+     <SearchBar />
+    <div className="min-h-screen bg-gray-100 p-4">
+      <div className="container mx-auto bg-white p-8 rounded-lg shadow-md">
       <DropdownSearch />
         <h1 className="text-3xl font-bold mb-8 text-center">Tourism Data</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -84,7 +84,8 @@ const TourismPage = () => {
         </div>
         <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
       </div>
-    </Layout>
+      </div>
+      </>
   );
 };
 

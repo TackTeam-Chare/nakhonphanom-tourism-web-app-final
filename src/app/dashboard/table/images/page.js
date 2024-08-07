@@ -136,8 +136,10 @@ const ImagesIndexPage = () => {
   const { globalFilter, pageIndex } = state;
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">
-      <div className="max-w-6xl w-full bg-white p-8 rounded-lg shadow-md">
+    // <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">
+    //   <div className="max-w-6xl w-full bg-white p-8 rounded-lg shadow-md">
+    <div className="min-h-screen bg-gray-100 p-4">
+      <div className="container mx-auto bg-white p-8 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-4">All Images</h1>
         <div className="flex justify-between items-center mb-4">
           <button
