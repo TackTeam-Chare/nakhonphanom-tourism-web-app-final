@@ -40,6 +40,35 @@ export const verifyPassword = async (data) => {
   }
 };
 
+export const getAllAdmins = async () => {
+  try {
+      const token = getToken();
+      const response = await auth.get('/auth/admin', {
+          headers: {
+              Authorization: `Bearer ${token}`
+          }
+      });
+      return response.data;
+  } catch (error) {
+      console.error('Error fetching places:', error);
+      throw error;
+  }
+};
+
+export const getAdminById = async (id) => {
+  try {
+    const token = getToken();
+    const response = await auth.get(`/auth/admin/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching admin:', error);
+    throw error;
+  }
+};
 export const getProfile = async () => {
   try {
     const token = getToken();
@@ -62,6 +91,51 @@ export const updateProfile = async (data) => {
     return response.data;
   } catch (error) {
     console.error('Error updating profile:', error);
+    throw error;
+  }
+};
+
+export const addAdmin = async (data) => {
+  try {
+    const token = getToken();
+    const response = await auth.post('/auth/register', data, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error adding admin:', error);
+    throw error;
+  }
+};
+
+export const updateAdmin  = async (id, data) => {
+  try {
+      const token = getToken();
+      const response = await auth.put(`auth/admin/${id}`, data, {
+          headers: {
+              Authorization: `Bearer ${token}`
+          }
+      });
+      return response.data;
+  } catch (error) {
+      console.error('Error updating profile admin:', error);
+      throw error;
+  }
+};
+
+export const deleteAdmin = async (id) => {
+  try {
+    const token = getToken();
+    const response = await auth.delete(`/auth/admin/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting admin:', error);
     throw error;
   }
 };

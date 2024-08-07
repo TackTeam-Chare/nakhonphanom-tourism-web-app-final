@@ -1,5 +1,4 @@
-'use client';
-
+"use client"
 import React, { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { createTouristEntity } from "@/utils/auth/admin/add/api";
@@ -13,7 +12,8 @@ import { PhotoIcon } from '@heroicons/react/24/solid';
 export default function CreateProject() {
   const { register, handleSubmit, setValue, control } = useForm({
     defaultValues: {
-      operating_hours: [{ day_of_week: "", opening_time: "", closing_time: "" }]
+      operating_hours: [{ day_of_week: "", opening_time: "", closing_time: "" }],
+      published: 0 // Default value for published
     }
   });
   const { fields, append, remove } = useFieldArray({
@@ -303,6 +303,20 @@ export default function CreateProject() {
                 </ul>
               </div>
             )}
+          </div>
+          <div className="relative z-0 w-full mb-6 group">
+            <input
+              type="checkbox"
+              id="published"
+              {...register("published")}
+              className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+            />
+            <label
+              htmlFor="published"
+              className="ml-2 block text-sm leading-5 text-gray-900"
+            >
+              Publish
+            </label>
           </div>
           {error && <p className="text-red-500 text-center">{error}</p>}
           <div>

@@ -33,7 +33,7 @@ export default function Sidebar({ isOpen, onToggleSidebar }) {
           </button>
           {isTableOpen && isOpen && (
             <div className="pl-6">
-              <Link href="#">
+              <Link href="/dashboard/table/admins">
                 <div className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md cursor-pointer">
                   <FaThList className="text-xl" />
                   <span className="ml-2">Admin</span>

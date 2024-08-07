@@ -1,11 +1,10 @@
-'use client';
+"use client";
 
 import React, { useEffect, useState } from "react";
 import Image from 'next/image';
 import { useRouter, useParams } from 'next/navigation';
 import { getPlaceById, getDistricts, getCategories, getSeasons } from "@/utils/auth/admin/get/api";
 import { updateTouristEntity } from "@/utils/auth/admin/edit/api";
-import { deleteOperatingHours } from "@/utils/auth/admin/delete/api";
 import { useForm, useFieldArray } from "react-hook-form";
 import { ToastContainer, toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,7 +15,12 @@ import { PhotoIcon } from '@heroicons/react/24/solid';
 export default function EditPlace() {
   const { id } = useParams();
   const router = useRouter();
-  const { register, handleSubmit, setValue, getValues, control } = useForm();
+  const { register, handleSubmit, setValue, control } = useForm({
+    defaultValues: {
+      operating_hours: [{ day_of_week: "", opening_time: "", closing_time: "" }],
+      published: 0
+    }
+  });
   const { fields, append, remove } = useFieldArray({
     control,
     name: "operating_hours"
@@ -32,35 +36,36 @@ export default function EditPlace() {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const [districtsData, categoriesData, seasonsData, placeData] = await Promise.all([
-          getDistricts(),
-          getCategories(),
-          getSeasons(),
-          getPlaceById(id)
-        ]);
-        setDistricts(districtsData);
-        setCategories(categoriesData);
-        setSeasons(seasonsData);
+        try {
+            const [districtsData, categoriesData, seasonsData, placeData] = await Promise.all([
+                getDistricts(),
+                getCategories(),
+                getSeasons(),
+                getPlaceById(id)
+            ]);
+            setDistricts(districtsData);
+            setCategories(categoriesData);
+            setSeasons(seasonsData);
 
-        setValue("name", placeData.name);
-        setValue("description", placeData.description);
-        setValue("location", placeData.location);
-        setValue("latitude", placeData.latitude);
-        setValue("longitude", placeData.longitude);
-        setValue("district_name", placeData.district_name || "");
-        setValue("category_name", placeData.category_name || "");
-        setValue("season_id", placeData.season_id || "");
-        setValue("operating_hours", placeData.operating_hours || []);
-        setExistingImages(placeData.images || []);
-      } catch (error) {
-        console.error("Failed to fetch data", error);
-        toast.error("Failed to fetch data. Please try again.");
-      }
+            setValue("name", placeData.name);
+            setValue("description", placeData.description);
+            setValue("location", placeData.location);
+            setValue("latitude", placeData.latitude);
+            setValue("longitude", placeData.longitude);
+            setValue("district_name", placeData.district_name || "");
+            setValue("category_name", placeData.category_name || "");
+            setValue("season_id", placeData.season_id || "");
+            setValue("operating_hours", placeData.operating_hours || []);
+            setValue("published", placeData.published === 1 ? 1 : 0);
+            setExistingImages(placeData.images || []);
+        } catch (error) {
+            console.error("Failed to fetch data", error);
+            toast.error("Failed to fetch data. Please try again.");
+        }
     };
 
     fetchData();
-  }, [id, setValue]);
+}, [id, setValue]);
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
@@ -196,7 +201,7 @@ export default function EditPlace() {
               >
                 <option value="">Select District</option>
                 {districts.map((district) => (
-                  <option key={district.name} value={district.name}>
+                  <option key={district.id} value={district.name}>
                     {district.name}
                   </option>
                 ))}
@@ -216,7 +221,7 @@ export default function EditPlace() {
               >
                 <option value="">Select Category</option>
                 {categories.map((category) => (
-                  <option key={category.name} value={category.name}>
+                  <option key={category.id} value={category.name}>
                     {category.name}
                   </option>
                 ))}
@@ -342,6 +347,20 @@ export default function EditPlace() {
                 </div>
               </div>
             )}
+          </div>
+          <div className="relative z-0 w-full mb-6 group">
+            <input
+              type="checkbox"
+              id="published"
+              {...register("published")}
+              className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+            />
+            <label
+              htmlFor="published"
+              className="ml-2 block text-sm leading-5 text-gray-900"
+            >
+              Publish
+            </label>
           </div>
           {error && <p className="text-red-500 text-center">{error}</p>}
           <button
