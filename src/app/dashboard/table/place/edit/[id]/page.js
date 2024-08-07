@@ -11,6 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import 'react-toastify/dist/ReactToastify.css';
+import { PhotoIcon } from '@heroicons/react/24/solid';
 
 export default function EditPlace() {
   const { id } = useParams();
@@ -25,6 +26,7 @@ export default function EditPlace() {
   const [categories, setCategories] = useState([]);
   const [seasons, setSeasons] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -59,6 +61,11 @@ export default function EditPlace() {
 
     fetchData();
   }, [id, setValue]);
+
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files);
+    setUploadedFiles(files.map(file => file.name));
+  };
 
   const onSubmit = async (data) => {
     setSubmitting(true);
@@ -180,65 +187,67 @@ export default function EditPlace() {
               </label>
             </div>
           </div>
-          <div className="relative z-0 w-full mb-6 group">
-            <select
-              id="district_name"
-              {...register("district_name")}
-              className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
-            >
-              <option value="">Select District</option>
-              {districts.map((district) => (
-                <option key={district.name} value={district.name}>
-                  {district.name}
-                </option>
-              ))}
-            </select>
-            <label
-              htmlFor="district_name"
-              className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6`}
-            >
-              District
-            </label>
-          </div>
-          <div className="relative z-0 w-full mb-6 group">
-            <select
-              id="category_name"
-              {...register("category_name")}
-              className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
-            >
-              <option value="">Select Category</option>
-              {categories.map((category) => (
-                <option key={category.name} value={category.name}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-            <label
-              htmlFor="category_name"
-              className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6`}
-            >
-              Category
-            </label>
-          </div>
-          <div className="relative z-0 w-full mb-6 group">
-            <select
-              id="season_id"
-              {...register("season_id")}
-              className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
-            >
-              <option value="">Select Season</option>
-              {seasons.map((season) => (
-                <option key={season.id} value={season.id}>
-                  {season.name}
-                </option>
-              ))}
-            </select>
-            <label
-              htmlFor="season_id"
-              className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6`}
-            >
-              Season
-            </label>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div className="relative z-0 w-full group">
+              <select
+                id="district_name"
+                {...register("district_name")}
+                className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
+              >
+                <option value="">Select District</option>
+                {districts.map((district) => (
+                  <option key={district.name} value={district.name}>
+                    {district.name}
+                  </option>
+                ))}
+              </select>
+              <label
+                htmlFor="district_name"
+                className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6`}
+              >
+                District
+              </label>
+            </div>
+            <div className="relative z-0 w-full group">
+              <select
+                id="category_name"
+                {...register("category_name")}
+                className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
+              >
+                <option value="">Select Category</option>
+                {categories.map((category) => (
+                  <option key={category.name} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+              <label
+                htmlFor="category_name"
+                className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6`}
+              >
+                Category
+              </label>
+            </div>
+            <div className="relative z-0 w-full group">
+              <select
+                id="season_id"
+                {...register("season_id")}
+                className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
+              >
+                <option value="">Select Season</option>
+                {seasons.map((season) => (
+                  <option key={season.id} value={season.id}>
+                    {season.name}
+                  </option>
+                ))}
+              </select>
+              <label
+                htmlFor="season_id"
+                className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6`}
+              >
+                Season
+              </label>
+            </div>
           </div>
           <div className="relative z-0 w-full mb-6 group">
             <label htmlFor="operating_hours" className="block text-sm font-medium text-gray-700">Operating Hours</label>
@@ -285,19 +294,33 @@ export default function EditPlace() {
             </button>
           </div>
           <div className="relative z-0 w-full mb-6 group">
-            <input
-              type="file"
-              id="image_paths"
-              {...register("image_paths")}
-              multiple
-              className="block py-2.5 px-4 w-full text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer"
-            />
-            <label
-              htmlFor="image_paths"
-              className={`absolute text-sm text-gray-500 bg-white px-1 transform duration-300 -translate-y-6 scale-75 top-0 left-3 -z-10 origin-[0] peer-focus:left-3 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-2.5 peer-focus:scale-75 peer-focus:-translate-y-6`}
-            >
-              Image Paths
-            </label>
+            <label htmlFor="image_paths" className="block text-sm font-medium leading-6 text-gray-900">Cover photo</label>
+            <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+              <div className="text-center">
+                <PhotoIcon aria-hidden="true" className="mx-auto h-12 w-12 text-gray-300" />
+                <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                  <label
+                    htmlFor="file-upload"
+                    className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                  >
+                    <span>Upload a file</span>
+                    <input id="file-upload" name="file-upload" type="file" multiple className="sr-only" {...register("image_paths")} onChange={handleFileChange} />
+                  </label>
+                  <p className="pl-1">or drag and drop</p>
+                </div>
+                <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+              </div>
+            </div>
+            {uploadedFiles.length > 0 && (
+              <div className="mt-4">
+                <h3 className="text-lg font-medium text-gray-700">Uploaded Files:</h3>
+                <ul className="list-disc list-inside text-sm text-gray-700">
+                  {uploadedFiles.map((fileName, index) => (
+                    <li key={index}>{fileName}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
             {existingImages.length > 0 && (
               <div className="mt-4">
                 <h3 className="text-lg font-medium text-gray-700">Existing Images:</h3>
